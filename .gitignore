@@ -1,0 +1,15 @@
+# IDE
+.idea/
+*.iml
+
+# Backend target folder
+Insurai-backend/target/
+
+# Environment files
+.env
+*.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
