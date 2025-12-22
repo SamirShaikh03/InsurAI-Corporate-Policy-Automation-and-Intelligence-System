@@ -257,8 +257,8 @@ public class ChatbotController {
     // Cohere Chat API for general questions
     // ----------------------------------------
     private String callCohereChat(String userInput, Employee employee, List<Claim> claims, List<Policy> policies, List<EmployeeQuery> queries) {
-        if (cohereApiKey.isEmpty()) {
-            return "Cohere API key is not set. I can answer only claims and policy questions for now.";
+        if (cohereApiKey.isEmpty() || cohereApiKey.equals("placeholder")) {
+            return "AI assistant is not configured. Please contact the administrator to set up the Cohere API key. For now, I can help you with claims and policy questions using the menu options.";
         }
 
         try {
@@ -307,8 +307,14 @@ public class ChatbotController {
                 if (aiText != null) return aiText.trim();
             }
 
-            return "I couldn’t find a clear answer at the moment.";
+            return "I couldn't find a clear answer at the moment.";
 
+        } catch (org.springframework.web.client.HttpClientErrorException.Unauthorized e) {
+            System.err.println("⚠️ Cohere API key is invalid or unauthorized: " + e.getMessage());
+            return "AI assistant authentication failed. The API key may be invalid or expired. Please contact the administrator.";
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+            System.err.println("⚠️ Cohere API error: " + e.getStatusCode() + " - " + e.getMessage());
+            return "AI assistant encountered an error. Please try again later or use the menu options for help.";
         } catch (Exception e) {
             e.printStackTrace();
             return "I’m having trouble connecting to InsurAI’s knowledge base right now. Please try again later.";
