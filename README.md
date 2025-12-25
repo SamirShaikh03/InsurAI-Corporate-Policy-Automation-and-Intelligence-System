@@ -62,28 +62,6 @@ InsurAI-Corporate-Policy-Automation-and-Intelligence-System/
 - Maven 3.8+
 - MySQL 8.0+
 
-### Installation
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/SamirShaikh03/InsurAI-Corporate-Policy-Automation-and-Intelligence-System.git
-   cd InsurAI-Corporate-Policy-Automation-and-Intelligence-System/Insurai-backend
-   ```
-
-2. **Configure Database**
-   - Update `src/main/resources/application.properties` with your MySQL credentials
-
-3. **Build and Run**
-   ```bash
-   mvn clean install
-   mvn spring-boot:run
-   ```
-
-4. **Access the API**
-   - Base URL: `http://localhost:8080`
-
----
-
 ## 🔐 Security
 
 - JWT-based authentication
@@ -111,5 +89,5 @@ This project is licensed under the MIT License.
 ---
 
 **Version**: 1.0.0  
-**Last Updated**: December 21, 2025
+**Last Updated**: December 24, 2025
 
