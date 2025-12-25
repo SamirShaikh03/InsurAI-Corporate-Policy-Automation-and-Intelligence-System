@@ -39,15 +39,15 @@ public class Enrollment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_hr_id")
-    private Hr assignedHR;
+    private Hr assignedHr;
 
     @Column(nullable = false)
-    private String status = "Pending"; //Pending, Approved, Rejected, Active, Cancelled
+    private String status = "Pending"; // Pending, Approved, Rejected, Active, Cancelled
 
     @Column(nullable = false)
     private LocalDate enrollmentDate;
 
-    private LocalDate effectiveDate; // set on approval
+    private LocalDate effectiveDate; // Set on approval
 
     private LocalDate terminationDate;
 
@@ -79,5 +79,5 @@ public class Enrollment {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-
 }
+

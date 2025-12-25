@@ -23,7 +23,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Dependent {
 
     @Id
@@ -43,7 +42,7 @@ public class Dependent {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    private String dependentId; //Internal/govt ID for dependent
+    private String dependentId; // Internal/govt ID for dependent
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -57,3 +56,4 @@ public class Dependent {
         this.createdAt = LocalDateTime.now();
     }
 }
+
