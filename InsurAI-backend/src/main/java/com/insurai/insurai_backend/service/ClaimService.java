@@ -117,8 +117,7 @@ public class ClaimService {
         return claimRepository.countByAssignedHrAndStatus(hr, "Pending");
     }
 
-    public List<Claim> getClaimsByEmployee(Employee employee) {
-        return claimRepository.findByEmployee(employee);
+    public List<Claim> getClaimsByEmployee(Employee employee) {return claimRepository.findByEmployeeWithDetails(employee);
     }
 
     public List<Claim> getClaimsByEmployeeId(String employeeId) {
