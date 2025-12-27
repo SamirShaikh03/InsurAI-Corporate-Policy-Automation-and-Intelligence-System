@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +52,7 @@ public class ClaimController {
    @Autowired
     private AuditLogService auditLogService;
 
-    private final String uploadDir = "C:/Users/Jeevan/Documents/InsurAi/insurai-backend/uploads/";
+    private final String uploadDir = "./uploads/";
 
 // -------------------- Submit Claim --------------------
 @PostMapping("")
@@ -64,27 +66,44 @@ public ResponseEntity<?> submitClaim(
         @RequestParam(required = false) List<MultipartFile> documents
 ) {
     try {
+        System.out.println("=== CLAIM SUBMISSION START ===");
+        System.out.println("PolicyId: " + policyId);
+        System.out.println("Title: " + title);
+        System.out.println("Amount: " + amount);
+        System.out.println("Date: " + date);
+
         // Validate token
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("ERROR: Missing or invalid Authorization header");
             return ResponseEntity.status(403).body("Unauthorized: Missing token");
         }
         String token = authHeader.substring(7).trim();
         String email = jwtUtil.extractEmail(token);
         String role = jwtUtil.extractRole(token);
+        System.out.println("Email from token: " + email);
+        System.out.println("Role from token: " + role);
+
         if (!"EMPLOYEE".equalsIgnoreCase(role)) {
+            System.out.println("ERROR: User is not an employee");
             return ResponseEntity.status(403).body("Unauthorized: Not an employee");
         }
 
         Employee employee = employeeRepository.findByEmail(email).orElse(null);
         if (employee == null) {
+            System.out.println("ERROR: Employee not found for email: " + email);
             return ResponseEntity.status(403).body("Unauthorized: Invalid token");
         }
+        System.out.println("Employee found: " + employee.getName());
 
-        Policy policy = policyRepository.findById(policyId)
-                .orElseThrow(() -> new RuntimeException("Policy not found"));
+        Policy policy = policyRepository.findById(policyId).orElse(null);
+        if (policy == null) {
+            System.out.println("ERROR: Policy not found for ID: " + policyId);
+            return ResponseEntity.status(400).body("Error: Policy not found with ID: " + policyId);
+        }
+        System.out.println("Policy found: " + policy.getPolicyName());
 
         // Handle document uploads safely
-        List<String> documentPaths = (documents != null) ?
+        List<String> documentPaths = (documents != null && !documents.isEmpty()) ?
                 documents.stream().map(file -> storeFile(file)).collect(Collectors.toList())
                 : List.of();
 
@@ -93,6 +112,7 @@ public ResponseEntity<?> submitClaim(
         Claim claim = new Claim(title, description, amount, claimDate, employee, policy, null, documentPaths);
 
         Claim savedClaim = claimService.submitClaim(claim);
+        System.out.println("Claim saved successfully with ID: " + savedClaim.getId());
 
         // ✅ Audit log for claim submission
         auditLogService.logAction(
@@ -106,6 +126,80 @@ public ResponseEntity<?> submitClaim(
         return ResponseEntity.ok(new ClaimDTO(savedClaim));
 
     } catch (Exception e) {
+        System.out.println("ERROR submitting claim: " + e.getMessage());
+        e.printStackTrace();
+        return ResponseEntity.status(400).body("Error submitting claim: " + e.getMessage());
+    }
+}
+
+// -------------------- Submit Claim (JSON format) --------------------
+@PostMapping("/submit")
+public ResponseEntity<?> submitClaimJson(
+        @RequestHeader(value = "Authorization", required = false) String authHeader,
+        @RequestBody Map<String, Object> claimData
+) {
+    try {
+        System.out.println("=== CLAIM SUBMISSION (JSON) START ===");
+        System.out.println("Received data: " + claimData);
+
+        // Validate token
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("ERROR: Missing or invalid Authorization header");
+            return ResponseEntity.status(403).body("Unauthorized: Missing token");
+        }
+        String token = authHeader.substring(7).trim();
+        String email = jwtUtil.extractEmail(token);
+        String role = jwtUtil.extractRole(token);
+        System.out.println("Email from token: " + email);
+        System.out.println("Role from token: " + role);
+
+        if (!"EMPLOYEE".equalsIgnoreCase(role)) {
+            System.out.println("ERROR: User is not an employee");
+            return ResponseEntity.status(403).body("Unauthorized: Not an employee");
+        }
+
+        Employee employee = employeeRepository.findByEmail(email).orElse(null);
+        if (employee == null) {
+            System.out.println("ERROR: Employee not found for email: " + email);
+            return ResponseEntity.status(403).body("Unauthorized: Invalid token");
+        }
+        System.out.println("Employee found: " + employee.getName());
+
+        // Extract data from JSON
+        Long policyId = Long.valueOf(claimData.get("policyId").toString());
+        String title = claimData.get("title").toString();
+        String description = claimData.get("description").toString();
+        Double amount = Double.valueOf(claimData.get("amount").toString());
+        String date = claimData.get("date").toString();
+
+        Policy policy = policyRepository.findById(policyId).orElse(null);
+        if (policy == null) {
+            System.out.println("ERROR: Policy not found for ID: " + policyId);
+            return ResponseEntity.status(400).body("Error: Policy not found with ID: " + policyId);
+        }
+        System.out.println("Policy found: " + policy.getPolicyName());
+
+        LocalDateTime claimDate = LocalDateTime.parse(date + "T00:00:00");
+
+        Claim claim = new Claim(title, description, amount, claimDate, employee, policy, null, List.of());
+
+        Claim savedClaim = claimService.submitClaim(claim);
+        System.out.println("Claim saved successfully with ID: " + savedClaim.getId());
+
+        // ✅ Audit log for claim submission
+        auditLogService.logAction(
+                employee.getId().toString(),
+                employee.getName(),
+                "EMPLOYEE",
+                "SUBMIT_CLAIM",
+                "Submitted claim for policy ID: " + policyId
+        );
+
+        return ResponseEntity.ok(new ClaimDTO(savedClaim));
+
+    } catch (Exception e) {
+        System.out.println("ERROR submitting claim (JSON): " + e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.status(400).body("Error submitting claim: " + e.getMessage());
     }
 }
@@ -184,36 +278,52 @@ public ResponseEntity<?> updateClaim(
 public ResponseEntity<?> getEmployeeClaims(
         @RequestHeader(value = "Authorization", required = false) String authHeader
 ) {
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-        return ResponseEntity.status(403).body("Missing or invalid Authorization header");
+    try {
+        System.out.println("=== GET EMPLOYEE CLAIMS START ===");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("ERROR: Missing or invalid Authorization header");
+            return ResponseEntity.status(403).body("Missing or invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7).trim();
+        String email = jwtUtil.extractEmail(token);
+        String role = jwtUtil.extractRole(token);
+        System.out.println("Email from token: " + email);
+        System.out.println("Role from token: " + role);
+
+        if (!"EMPLOYEE".equalsIgnoreCase(role)) {
+            System.out.println("ERROR: User is not an employee");
+            return ResponseEntity.status(403).body("Access denied: Not an employee");
+        }
+
+        Employee employee = employeeRepository.findByEmail(email).orElse(null);
+        if (employee == null) {
+            System.out.println("ERROR: Employee not found for email: " + email);
+            return ResponseEntity.status(403).body("Invalid token: employee not found");
+        }
+        System.out.println("Employee found: " + employee.getName());
+
+        List<Claim> claims = claimService.getClaimsByEmployee(employee);
+        System.out.println("Found " + claims.size() + " claims for employee");
+
+        List<ClaimDTO> claimDTOs = claims.stream().map(ClaimDTO::new).collect(Collectors.toList());
+
+        // -------------------- Audit Log --------------------
+        auditLogService.logAction(
+                employee.getId().toString(),
+                employee.getName(),
+                "EMPLOYEE",
+                "VIEW_CLAIMS",
+                "Fetched all claims for employee"
+        );
+
+        return ResponseEntity.ok(claimDTOs);
+    } catch (Exception e) {
+        System.out.println("ERROR fetching claims: " + e.getMessage());
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("Error fetching claims: " + e.getMessage());
     }
-
-    String token = authHeader.substring(7).trim();
-    String email = jwtUtil.extractEmail(token);
-    String role = jwtUtil.extractRole(token);
-
-    if (!"EMPLOYEE".equalsIgnoreCase(role)) {
-        return ResponseEntity.status(403).body("Access denied: Not an employee");
-    }
-
-    Employee employee = employeeRepository.findByEmail(email).orElse(null);
-    if (employee == null) {
-        return ResponseEntity.status(403).body("Invalid token: employee not found");
-    }
-
-    List<Claim> claims = claimService.getClaimsByEmployee(employee);
-    List<ClaimDTO> claimDTOs = claims.stream().map(ClaimDTO::new).collect(Collectors.toList());
-
-    // -------------------- Audit Log --------------------
-    auditLogService.logAction(
-            employee.getId().toString(),
-            employee.getName(),
-            "EMPLOYEE",
-            "VIEW_CLAIMS",
-            "Fetched all claims for employee"
-    );
-
-    return ResponseEntity.ok(claimDTOs);
 }
 
 
@@ -254,7 +364,9 @@ public ResponseEntity<?> getEmployeeClaims(
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private Long employeeId;
+        private String employeeName;
         private Long policyId;
+        private String policyName;
         private List<String> documents;
         private Long assignedHrId;
 
@@ -269,7 +381,9 @@ public ResponseEntity<?> getEmployeeClaims(
             this.createdAt = claim.getCreatedAt();
             this.updatedAt = claim.getUpdatedAt();
             this.employeeId = (claim.getEmployee() != null) ? claim.getEmployee().getId() : null;
+            this.employeeName = (claim.getEmployee() != null) ? claim.getEmployee().getName() : null;
             this.policyId = (claim.getPolicy() != null) ? claim.getPolicy().getId() : null;
+            this.policyName = (claim.getPolicy() != null) ? claim.getPolicy().getPolicyName() : null;
             this.documents = claim.getDocuments();
             this.assignedHrId = (claim.getAssignedHr() != null) ? claim.getAssignedHr().getId() : null;
         }
@@ -285,7 +399,9 @@ public ResponseEntity<?> getEmployeeClaims(
         public LocalDateTime getCreatedAt() { return createdAt; }
         public LocalDateTime getUpdatedAt() { return updatedAt; }
         public Long getEmployeeId() { return employeeId; }
+        public String getEmployeeName() { return employeeName; }
         public Long getPolicyId() { return policyId; }
+        public String getPolicyName() { return policyName; }
         public List<String> getDocuments() { return documents; }
         public Long getAssignedHrId() { return assignedHrId; }
     }
