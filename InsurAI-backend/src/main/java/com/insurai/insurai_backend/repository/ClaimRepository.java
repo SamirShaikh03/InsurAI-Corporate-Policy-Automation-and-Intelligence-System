@@ -19,6 +19,10 @@ public interface ClaimRepository extends JpaRepository<Claim, Long> {
     // Get all claims submitted by a specific employee
     List<Claim> findByEmployee(Employee employee);
 
+    // Get all claims submitted by employee with eager fetch of policy and employee
+    @Query("SELECT c FROM Claim c JOIN FETCH c.employee e JOIN FETCH c.policy p WHERE c.employee = :employee")
+    List<Claim> findByEmployeeWithDetails(@Param("employee") Employee employee);
+
     // Get all claims submitted by employee's corporate ID
     List<Claim> findByEmployee_EmployeeId(String employeeId);
 
