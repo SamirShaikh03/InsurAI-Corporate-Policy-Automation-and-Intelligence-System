@@ -33,4 +33,7 @@ public class Hr {
 
     @Column(nullable = false)
     private String password; // Encrypted Password
+
+    @Column(nullable = false)
+    private boolean active = true; // Active status for HR
 }
