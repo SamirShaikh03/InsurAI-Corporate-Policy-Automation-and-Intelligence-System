@@ -68,6 +68,7 @@ public class AdminJwtAuthenticationFilter extends OncePerRequestFilter {
                path.startsWith("/employee/") ||
                path.startsWith("/hr/") ||
                path.startsWith("/uploads/") ||
+               path.startsWith("/api/files/") ||
                path.startsWith("/admin/login") ||
                path.startsWith("/admin/register");
     }

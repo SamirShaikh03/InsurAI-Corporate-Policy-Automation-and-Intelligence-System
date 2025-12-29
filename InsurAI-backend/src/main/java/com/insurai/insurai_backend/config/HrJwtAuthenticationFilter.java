@@ -74,6 +74,7 @@ public class HrJwtAuthenticationFilter extends OncePerRequestFilter {
                path.startsWith("/agent/") ||
                path.startsWith("/employee/") ||
                path.startsWith("/uploads/") ||
+               path.startsWith("/api/files/") ||
                path.startsWith("/hr/login");
     }
 }

@@ -67,7 +67,8 @@ protected boolean shouldNotFilter(HttpServletRequest request) throws ServletExce
         path.startsWith("/agent/login") ||
         path.startsWith("/agent/register") ||
         path.startsWith("/hr/login") ||
-        path.startsWith("/uploads/")) {
+        path.startsWith("/uploads/") ||
+        path.startsWith("/api/files/")) {
         return true;
     }
 
