@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/employee/claims/**").hasRole("EMPLOYEE")
                 .requestMatchers("/employee/queries/**").hasRole("EMPLOYEE")
                 .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers("/api/files/**").permitAll()  // File download endpoint
                 .requestMatchers("/hr/claims").hasAnyRole("HR")
                 .requestMatchers("/admin/claims").hasAnyRole("ADMIN")
                 .requestMatchers("/hr/claims/fraud").hasRole("HR")
