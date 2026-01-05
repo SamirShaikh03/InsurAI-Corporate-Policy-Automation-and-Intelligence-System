@@ -68,8 +68,10 @@ public class EnrollmentService {
         // Save enrollment
         Enrollment savedEnrollment = enrollmentRepository.save(enrollment);
 
-        // Add dependents if Family coverage
-        if ("Family".equalsIgnoreCase(coverageType) && dependents != null && !dependents.isEmpty()) {
+        // Add dependents if Family or Family_Floater coverage
+        String normalizedCoverage = coverageType.toUpperCase();
+        if ((normalizedCoverage.equals("FAMILY") || normalizedCoverage.equals("FAMILY_FLOATER"))
+                && dependents != null && !dependents.isEmpty()) {
             for (Map<String, Object> depData : dependents) {
                 Dependent dependent = new Dependent(
                         savedEnrollment,
