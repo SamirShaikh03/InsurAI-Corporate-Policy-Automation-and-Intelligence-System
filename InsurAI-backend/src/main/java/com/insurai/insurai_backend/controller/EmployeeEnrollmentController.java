@@ -35,7 +35,7 @@ public class EmployeeEnrollmentController {
     private final JwtUtil jwtUtil;
 
     // ==================== Submit Enrollment Request ====================
-    @PostMapping
+    @PostMapping("/request")
     public ResponseEntity<?> submitEnrollment(
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             @RequestBody Map<String, Object> request) {
@@ -66,8 +66,11 @@ public class EmployeeEnrollmentController {
             List<Map<String, Object>> dependents = (List<Map<String, Object>>) request.get("dependents");
 
             // Validate coverage type
-            if (!"Individual".equalsIgnoreCase(coverageType) && !"Family".equalsIgnoreCase(coverageType)) {
-                return ResponseEntity.badRequest().body("Coverage type must be 'Individual' or 'Family'");
+            String normalizedCoverageType = coverageType.toUpperCase();
+            if (!normalizedCoverageType.equals("INDIVIDUAL") &&
+                !normalizedCoverageType.equals("FAMILY") &&
+                !normalizedCoverageType.equals("FAMILY_FLOATER")) {
+                return ResponseEntity.badRequest().body("Coverage type must be 'Individual', 'Family', or 'Family_Floater'");
             }
 
             Enrollment enrollment = enrollmentService.createEnrollment(
@@ -81,7 +84,7 @@ public class EmployeeEnrollmentController {
     }
 
     // ==================== Get My Enrollments ====================
-    @GetMapping
+    @GetMapping("/my")
     public ResponseEntity<?> getMyEnrollments(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         try {

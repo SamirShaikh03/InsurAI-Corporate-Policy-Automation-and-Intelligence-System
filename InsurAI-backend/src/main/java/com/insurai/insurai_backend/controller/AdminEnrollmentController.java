@@ -28,7 +28,7 @@ public class AdminEnrollmentController {
     private final JwtUtil jwtUtil;
 
     // ==================== Get All Enrollments ====================
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getAllEnrollments(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         try {
@@ -49,7 +49,7 @@ public class AdminEnrollmentController {
     }
 
     // ==================== Get Enrollment Statistics ====================
-    @GetMapping("/statistics")
+    @GetMapping("/stats")
     public ResponseEntity<?> getEnrollmentStatistics(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         try {

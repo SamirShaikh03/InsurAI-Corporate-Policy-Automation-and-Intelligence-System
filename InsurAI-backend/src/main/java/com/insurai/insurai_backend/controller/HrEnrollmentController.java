@@ -31,6 +31,27 @@ public class HrEnrollmentController {
     private final EnrollmentService enrollmentService;
     private final JwtUtil jwtUtil;
 
+    // ==================== Get All Enrollments ====================
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllEnrollments(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        try {
+            if (!validateHrToken(authHeader)) {
+                return ResponseEntity.status(403).body("Unauthorized: Not an HR");
+            }
+
+            List<Enrollment> enrollments = enrollmentService.getAllEnrollments();
+            List<EnrollmentDTO> dtos = enrollments.stream()
+                    .map(EnrollmentDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(dtos);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error fetching enrollments: " + e.getMessage());
+        }
+    }
+
     // ==================== Get Pending Enrollments ====================
     @GetMapping("/pending")
     public ResponseEntity<?> getPendingEnrollments(

@@ -196,20 +196,34 @@ public class AdminController {
             @PathVariable Long id,
             @RequestBody StatusUpdateRequest request) {
         try {
+            System.out.println("=== HR Status Update Request ===");
+            System.out.println("HR ID: " + id);
+            System.out.println("New Status: " + request.getStatus());
+
             if (!isAdminJwt(authHeader)) {
                 return ResponseEntity.status(403).body("Access denied. Please login as Admin.");
             }
 
             Hr hr = hrRepository.findById(id).orElse(null);
             if (hr == null) {
+                System.out.println("HR not found with ID: " + id);
                 return ResponseEntity.status(404).body("HR not found");
             }
 
-            hr.setActive("Active".equalsIgnoreCase(request.getStatus()));
+            System.out.println("Found HR: " + hr.getName() + " (" + hr.getEmail() + ")");
+            System.out.println("Current active status: " + hr.isActive());
+
+            boolean newActiveStatus = "Active".equalsIgnoreCase(request.getStatus());
+            hr.setActive(newActiveStatus);
             hrRepository.save(hr);
+
+            System.out.println("Updated active status to: " + hr.isActive());
+            System.out.println("=== HR Status Update Complete ===");
 
             return ResponseEntity.ok("HR status updated successfully");
         } catch (Exception e) {
+            System.err.println("Error updating HR status: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Error updating HR status: " + e.getMessage());
         }
     }
