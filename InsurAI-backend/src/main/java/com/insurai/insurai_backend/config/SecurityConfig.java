@@ -48,23 +48,26 @@ public class SecurityConfig {
 
                 // Employee Enrollment endpoints
                 .requestMatchers("/employee/enrollments/**").hasRole("EMPLOYEE")
-                .requestMatchers("/employee/reimbursements").hasRole("EMPLOYEE")
+                .requestMatchers("/employee/reimbursements/**").hasRole("EMPLOYEE")
+                .requestMatchers("/employee/renewals/**").hasRole("EMPLOYEE")
 
                 // HR Enrollment & Reimbursement endpoints
                 .requestMatchers("/hr/enrollments/**").hasRole("HR")
                 .requestMatchers("/hr/claims/*/initiate-reimbursement").hasRole("HR")
+                .requestMatchers("/hr/reimbursements/**").hasRole("HR")
                 .requestMatchers("/hr/renewals/**").hasRole("HR")
 
                 // Admin Reimbursement & Renewal endpoints
                 .requestMatchers("/admin/reimbursements/**").hasRole("ADMIN")
                 .requestMatchers("/admin/renewals/**").hasRole("ADMIN")
+                .requestMatchers("/admin/enrollments/**").hasRole("ADMIN")
 
                 // ===============================================================
 
-                // Notifications endpoints
-               .requestMatchers("/notifications/user/**").hasAnyAuthority("ROLE_EMPLOYEE", "ROLE_HR", "ROLE_ADMIN")
-.requestMatchers("/notifications/**").hasAnyRole("HR", "ADMIN") // delete endpoints
-.requestMatchers("/notifications/*/read").hasAnyAuthority("ROLE_EMPLOYEE", "ROLE_HR", "ROLE_ADMIN") // allow mark as read
+                // Notifications endpoints - ORDER MATTERS: Most specific first
+                .requestMatchers("/notifications/*/read").hasAnyAuthority("ROLE_EMPLOYEE", "ROLE_HR", "ROLE_ADMIN", "ROLE_AGENT") // allow mark as read
+                .requestMatchers("/notifications/user/**").hasAnyAuthority("ROLE_EMPLOYEE", "ROLE_HR", "ROLE_ADMIN", "ROLE_AGENT")
+                .requestMatchers("/notifications/**").hasAnyRole("HR", "ADMIN") // delete endpoints
 
     .requestMatchers("/employee/chatbot").hasRole("EMPLOYEE")
 
