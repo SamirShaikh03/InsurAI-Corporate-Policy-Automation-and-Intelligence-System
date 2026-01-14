@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logoImage from "../../../assets/logo-img.png";
 
 /**
  * AuthLayout – Shared layout for all authentication pages
@@ -23,7 +24,14 @@ export default function AuthLayout({
       <div className="auth-page__form">
         {/* Brand */}
         <Link to="/" className="auth-page__brand">
-          InsurAI
+          <img
+            src={logoImage}
+            alt="InsurAI"
+            style={{
+              height: "40px",
+              width: "auto",
+            }}
+          />
         </Link>
         <div className="auth-page__form-inner">
 
