@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AuthLayout from "./components/AuthLayout";
-import agentAuthImage from "../../assets/emp-auth-image1.jpg";
+import agentAuthImage from "../../assets/agent-auth-image.jpg";
 import { InlineSpinner } from "../../components/loading";
 import "bootstrap/dist/css/bootstrap.min.css";
 

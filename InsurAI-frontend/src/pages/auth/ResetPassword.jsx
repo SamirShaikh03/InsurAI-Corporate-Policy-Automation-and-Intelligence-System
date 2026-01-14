@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import AuthLayout from "./components/AuthLayout";
-import empAuthImage from "../../assets/emp-auth-image1.jpg";
+import empAuthImage from "../../assets/emp-auth-image.jpg";
 import { InlineSpinner } from "../../components/loading";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/enterprise-theme.css";
