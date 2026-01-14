@@ -1,0 +1,776 @@
+/* ============================================
+   EMPLOYEE NEW FEATURES - ENROLLMENTS, REIMBURSEMENTS, RENEWALS
+   ============================================ */
+
+/* ============================================
+   STAT CARDS - NEW LAYOUT
+   ============================================ */
+.emp-stat-card {
+  background: var(--emp-surface, #ffffff);
+  border-radius: var(--emp-radius-lg, 14px);
+  padding: 1.25rem;
+  border: 1px solid var(--emp-border, #e2e8f0);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.emp-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--emp-primary, #4f46e5) 0%, var(--emp-primary-light, #6366f1) 100%);
+}
+
+.emp-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--emp-shadow-md, 0 10px 15px -3px rgba(79, 70, 229, 0.1));
+}
+
+.emp-stat-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--emp-radius, 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.emp-stat-card__icon--primary {
+  background: var(--emp-primary-subtle, rgba(79, 70, 229, 0.08));
+  color: var(--emp-primary, #4f46e5);
+}
+
+.emp-stat-card__icon--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--emp-success, #10b981);
+}
+
+.emp-stat-card__icon--warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--emp-warning, #f59e0b);
+}
+
+.emp-stat-card__icon--danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--emp-danger, #ef4444);
+}
+
+.emp-stat-card__icon--info {
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--emp-info, #0ea5e9);
+}
+
+.emp-stat-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.emp-stat-card__label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--emp-text-muted, #64748b);
+  margin-bottom: 0.25rem;
+}
+
+.emp-stat-card__value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--emp-text, #0f172a);
+  line-height: 1.2;
+}
+
+/* ============================================
+   FORM CONTROLS
+   ============================================ */
+.emp-form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--emp-border, #e2e8f0);
+  border-radius: var(--emp-radius, 10px);
+  font-size: 0.9rem;
+  color: var(--emp-text, #0f172a);
+  background: var(--emp-surface, #ffffff);
+  transition: all 0.2s ease;
+}
+
+.emp-form-control:focus {
+  outline: none;
+  border-color: var(--emp-primary, #4f46e5);
+  box-shadow: 0 0 0 3px var(--emp-primary-subtle, rgba(79, 70, 229, 0.08));
+}
+
+.emp-form-control::placeholder {
+  color: var(--emp-text-light, #94a3b8);
+}
+
+.emp-form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--emp-text, #0f172a);
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   SEARCH BOX
+   ============================================ */
+.emp-search-box {
+  position: relative;
+}
+
+.emp-search-box__icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--emp-text-muted, #64748b);
+}
+
+.emp-search-box .emp-form-control {
+  padding-left: 2.75rem;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.emp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.emp-empty-state__icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--emp-subtle, #f1f5f9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--emp-text-light, #94a3b8);
+  margin-bottom: 1.5rem;
+}
+
+.emp-empty-state__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--emp-text, #0f172a);
+  margin: 0 0 0.5rem 0;
+}
+
+.emp-empty-state__desc {
+  font-size: 0.9rem;
+  color: var(--emp-text-muted, #64748b);
+  margin: 0 0 1.5rem 0;
+  max-width: 400px;
+}
+
+/* ============================================
+   DETAIL GROUP
+   ============================================ */
+.emp-detail-group {
+  margin-bottom: 1rem;
+}
+
+.emp-detail-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--emp-text-muted, #64748b);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.emp-detail-value {
+  font-size: 0.95rem;
+  color: var(--emp-text, #0f172a);
+  margin: 0;
+}
+
+/* ============================================
+   BUTTON VARIANTS
+   ============================================ */
+.emp-btn--success {
+  background: linear-gradient(135deg, var(--emp-success, #10b981) 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.emp-btn--success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.emp-btn--danger {
+  background: linear-gradient(135deg, var(--emp-danger, #ef4444) 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.emp-btn--danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+}
+
+.emp-btn--info {
+  background: linear-gradient(135deg, var(--emp-info, #0ea5e9) 0%, #0284c7 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+}
+
+.emp-btn--info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35);
+}
+
+/* ============================================
+   BADGE SECONDARY
+   ============================================ */
+.emp-badge--secondary {
+  background: var(--emp-subtle, #f1f5f9);
+  color: var(--emp-text-muted, #64748b);
+}
+
+/* ============================================
+   MODAL STYLES
+   ============================================ */
+.emp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.emp-modal {
+  background: var(--emp-surface, #ffffff);
+  border-radius: var(--emp-radius-lg, 14px);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: empModalSlideIn 0.3s ease;
+}
+
+@keyframes empModalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.emp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--emp-border, #e2e8f0);
+  background: var(--emp-subtle, #f1f5f9);
+}
+
+.emp-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--emp-text, #0f172a);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emp-modal-title i {
+  color: var(--emp-primary, #4f46e5);
+}
+
+.emp-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--emp-text-muted, #64748b);
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  border-radius: var(--emp-radius-sm, 6px);
+  transition: all 0.2s ease;
+}
+
+.emp-modal-close:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--emp-danger, #ef4444);
+}
+
+.emp-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.emp-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--emp-border, #e2e8f0);
+  background: var(--emp-subtle, #f1f5f9);
+}
+
+/* ============================================
+   REIMBURSEMENT LIST STYLES
+   ============================================ */
+.emp-reimbursement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.emp-reimbursement-item {
+  background: var(--emp-surface, #ffffff);
+  border: 1px solid var(--emp-border, #e2e8f0);
+  border-radius: var(--emp-radius-lg, 14px);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.emp-reimbursement-item:hover {
+  box-shadow: var(--emp-shadow-md, 0 10px 15px -3px rgba(79, 70, 229, 0.1));
+  border-color: var(--emp-primary-light, #6366f1);
+}
+
+.emp-reimbursement-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--emp-subtle, #f1f5f9);
+  border-bottom: 1px solid var(--emp-border, #e2e8f0);
+}
+
+.emp-reimbursement-item__body {
+  padding: 1.25rem;
+}
+
+.emp-reimbursement-item__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--emp-border, #e2e8f0);
+  background: var(--emp-subtle, #f1f5f9);
+}
+
+/* ============================================
+   PROGRESS TRACKER
+   ============================================ */
+.emp-progress-tracker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emp-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--emp-text-muted, #64748b);
+}
+
+.emp-progress-step.completed {
+  color: var(--emp-success, #10b981);
+}
+
+.emp-progress-step__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--emp-border, #e2e8f0);
+  border: 2px solid var(--emp-border, #e2e8f0);
+}
+
+.emp-progress-step.completed .emp-progress-step__dot {
+  background: var(--emp-success, #10b981);
+  border-color: var(--emp-success, #10b981);
+}
+
+.emp-progress-step:not(:last-child)::after {
+  content: '';
+  width: 30px;
+  height: 2px;
+  background: var(--emp-border, #e2e8f0);
+  margin-left: 0.25rem;
+}
+
+.emp-progress-step.completed:not(:last-child)::after {
+  background: var(--emp-success, #10b981);
+}
+
+/* ============================================
+   ICON BOX
+   ============================================ */
+.emp-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--emp-radius, 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.emp-icon-box--primary {
+  background: var(--emp-primary-subtle, rgba(79, 70, 229, 0.08));
+  color: var(--emp-primary, #4f46e5);
+}
+
+.emp-icon-box--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--emp-success, #10b981);
+}
+
+.emp-icon-box--warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--emp-warning, #f59e0b);
+}
+
+.emp-icon-box--info {
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--emp-info, #0ea5e9);
+}
+
+.emp-icon-box--danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--emp-danger, #ef4444);
+}
+
+/* ============================================
+   RENEWAL CARD STYLES
+   ============================================ */
+.emp-renewal-card {
+  background: var(--emp-surface, #ffffff);
+  border: 1px solid var(--emp-border, #e2e8f0);
+  border-radius: var(--emp-radius-lg, 14px);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.emp-renewal-card:hover {
+  box-shadow: var(--emp-shadow-md, 0 10px 15px -3px rgba(79, 70, 229, 0.1));
+  transform: translateY(-2px);
+}
+
+.emp-renewal-card--danger {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.emp-renewal-card--warning {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.emp-renewal-card--info {
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.emp-renewal-card--success {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.emp-renewal-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--emp-subtle, #f1f5f9);
+  border-bottom: 1px solid var(--emp-border, #e2e8f0);
+}
+
+.emp-renewal-card__status {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--emp-radius, 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.emp-renewal-card__status--danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--emp-danger, #ef4444);
+}
+
+.emp-renewal-card__status--warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--emp-warning, #f59e0b);
+}
+
+.emp-renewal-card__status--info {
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--emp-info, #0ea5e9);
+}
+
+.emp-renewal-card__status--success {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--emp-success, #10b981);
+}
+
+.emp-renewal-card__body {
+  padding: 1.25rem;
+  flex: 1;
+}
+
+.emp-renewal-card__title {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--emp-text, #0f172a);
+}
+
+.emp-renewal-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emp-renewal-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emp-renewal-card__label {
+  font-size: 0.85rem;
+  color: var(--emp-text-muted, #64748b);
+}
+
+.emp-renewal-card__value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--emp-text, #0f172a);
+}
+
+.emp-renewal-card__footer {
+  padding: 1rem;
+  border-top: 1px solid var(--emp-border, #e2e8f0);
+  text-align: center;
+}
+
+/* ============================================
+   RENEWAL PROGRESS BAR
+   ============================================ */
+.emp-renewal-progress {
+  height: 4px;
+  background: var(--emp-border, #e2e8f0);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.emp-renewal-progress__bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.emp-renewal-progress__bar--success {
+  background: var(--emp-success, #10b981);
+}
+
+.emp-renewal-progress__bar--info {
+  background: var(--emp-info, #0ea5e9);
+}
+
+.emp-renewal-progress__bar--warning {
+  background: var(--emp-warning, #f59e0b);
+}
+
+.emp-renewal-progress__bar--danger {
+  background: var(--emp-danger, #ef4444);
+}
+
+/* ============================================
+   ALERT BANNER
+   ============================================ */
+.emp-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--emp-radius-lg, 14px);
+  border: 1px solid;
+}
+
+.emp-alert--warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.emp-alert--danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.emp-alert__icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.emp-alert--warning .emp-alert__icon {
+  color: var(--emp-warning, #f59e0b);
+}
+
+.emp-alert--danger .emp-alert__icon {
+  color: var(--emp-danger, #ef4444);
+}
+
+.emp-alert__content {
+  flex: 1;
+}
+
+.emp-alert__title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--emp-text, #0f172a);
+}
+
+.emp-alert__text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--emp-text-muted, #64748b);
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+@media (max-width: 768px) {
+  .emp-reimbursement-item__footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .emp-progress-tracker {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .emp-stat-card {
+    padding: 1rem;
+  }
+
+  .emp-stat-card__value {
+    font-size: 1.25rem;
+  }
+
+  .emp-renewal-card__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* ============================================
+   ENHANCED DATE PICKER STYLES
+   ============================================ */
+.emp-date-picker {
+  position: relative;
+  cursor: pointer;
+}
+
+.emp-date-picker::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
+/* Custom date input wrapper */
+input[type="date"].emp-form-control {
+  position: relative;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234f46e5' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px;
+}
+
+input[type="date"].emp-form-control:focus {
+  border-color: var(--emp-primary, #4f46e5);
+  box-shadow: 0 0 0 3px var(--emp-primary-subtle, rgba(79, 70, 229, 0.12));
+}
+
+/* Date input placeholder styling */
+input[type="date"].emp-form-control:not(:focus):invalid {
+  color: var(--emp-text-light, #94a3b8);
+}
+
+/* Webkit date picker dropdown styling */
+input[type="date"].emp-form-control::-webkit-datetime-edit {
+  padding: 0;
+}
+
+input[type="date"].emp-form-control::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+input[type="date"].emp-form-control::-webkit-datetime-edit-text {
+  color: var(--emp-text-muted, #64748b);
+  padding: 0 0.15rem;
+}
+
+input[type="date"].emp-form-control::-webkit-datetime-edit-month-field,
+input[type="date"].emp-form-control::-webkit-datetime-edit-day-field,
+input[type="date"].emp-form-control::-webkit-datetime-edit-year-field {
+  color: var(--emp-text, #0f172a);
+}
+
+/* Firefox date picker */
+input[type="date"].emp-form-control::-moz-calendar-picker-indicator {
+  opacity: 0;
+}
+
+/* Date picker hover state */
+input[type="date"].emp-form-control:hover {
+  border-color: var(--emp-primary-light, #6366f1);
+}
+
+/* Enhanced form label for date fields */
+.emp-form-label i.bi-calendar-event {
+  color: var(--emp-primary, #4f46e5);
+}

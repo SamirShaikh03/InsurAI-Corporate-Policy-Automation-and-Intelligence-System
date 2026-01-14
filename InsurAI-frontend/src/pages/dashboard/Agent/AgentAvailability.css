@@ -1,0 +1,605 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   AGENT AVAILABILITY – Emerald (#059669) / Amber (#f59e0b) Theme
+   Professional availability management with modern card design
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WRAPPER & VARIABLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability {
+  --avail-primary: #059669;
+  --avail-primary-dark: #047857;
+  --avail-primary-light: #10b981;
+  --avail-primary-pale: #ecfdf5;
+  --avail-primary-subtle: #d1fae5;
+  --avail-accent: #f59e0b;
+  --avail-accent-dark: #d97706;
+  --avail-accent-light: #fbbf24;
+  --avail-accent-pale: #fffbeb;
+  --avail-success: #10b981;
+  --avail-warning: #f59e0b;
+  --avail-danger: #ef4444;
+  --avail-info: #0ea5e9;
+  --avail-surface: #ffffff;
+  --avail-bg: #f8faf9;
+  --avail-border: #e2e8f0;
+  --avail-border-light: #f1f5f9;
+  --avail-ink: #0f172a;
+  --avail-ink-light: #334155;
+  --avail-muted: #64748b;
+  --avail-shadow: 0 4px 16px rgba(5, 150, 105, 0.08);
+  --avail-shadow-md: 0 8px 24px rgba(5, 150, 105, 0.1);
+  --avail-shadow-lg: 0 16px 48px rgba(5, 150, 105, 0.12);
+  --avail-radius: 0.75rem;
+  --avail-radius-lg: 1rem;
+  --avail-radius-xl: 1.25rem;
+  --avail-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAGE HEADER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .avail-header {
+  margin-bottom: 2rem;
+}
+
+.agent-availability .avail-header h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--avail-primary-dark) 0%, var(--avail-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.025em;
+}
+
+.agent-availability .avail-header p {
+  color: var(--avail-muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MAIN CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .avail-card {
+  background: var(--avail-surface);
+  border-radius: var(--avail-radius-xl);
+  border: 1px solid var(--avail-border);
+  box-shadow: var(--avail-shadow-md);
+  overflow: hidden;
+}
+
+.agent-availability .avail-card-header {
+  background: linear-gradient(135deg, var(--avail-primary-dark), var(--avail-primary));
+  color: #fff;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.agent-availability .avail-card-header i {
+  font-size: 1.25rem;
+}
+
+.agent-availability .avail-card-header h5 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.agent-availability .avail-card-body {
+  padding: 1.75rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ALERTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .alert {
+  border-radius: var(--avail-radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  border: none;
+  margin-bottom: 1.5rem;
+}
+
+.agent-availability .alert i {
+  font-size: 1.25rem;
+}
+
+.agent-availability .alert-success {
+  background: linear-gradient(135deg, var(--avail-primary-pale), rgba(16, 185, 129, 0.08));
+  color: var(--avail-primary-dark);
+  border-left: 4px solid var(--avail-primary);
+}
+
+.agent-availability .alert-danger {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  color: #dc2626;
+  border-left: 4px solid var(--avail-danger);
+}
+
+.agent-availability .alert-info {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(14, 165, 233, 0.05));
+  color: #0284c7;
+  border-left: 4px solid var(--avail-info);
+}
+
+.agent-availability .alert-dismissible .btn-close {
+  padding: 1.25rem;
+  opacity: 0.6;
+}
+
+.agent-availability .alert-dismissible .btn-close:hover {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INFO BANNER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .info-banner {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(14, 165, 233, 0.03));
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  border-radius: var(--avail-radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.agent-availability .info-banner i {
+  color: var(--avail-info);
+  font-size: 1.1rem;
+  margin-top: 0.1rem;
+}
+
+.agent-availability .info-banner p {
+  color: var(--avail-ink-light);
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AVAILABILITY TOGGLE SECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .toggle-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--avail-bg);
+  border-radius: var(--avail-radius-lg);
+  border: 1px solid var(--avail-border-light);
+}
+
+.agent-availability .form-switch {
+  padding-left: 0;
+}
+
+.agent-availability .form-switch .form-check-input {
+  width: 3.5rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  border: 2px solid var(--avail-border);
+  background-color: var(--avail-border);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+  transition: all 0.3s var(--avail-ease);
+  cursor: pointer;
+  margin: 0;
+}
+
+.agent-availability .form-switch .form-check-input:checked {
+  background-color: var(--avail-primary);
+  border-color: var(--avail-primary);
+}
+
+.agent-availability .form-switch .form-check-input:focus {
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
+  border-color: var(--avail-primary);
+}
+
+.agent-availability .toggle-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--avail-ink);
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATUS DISPLAY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .status-box {
+  padding: 1.25rem;
+  border-radius: var(--avail-radius-lg);
+  margin-bottom: 2rem;
+  transition: all 0.3s var(--avail-ease);
+}
+
+.agent-availability .status-box.available {
+  background: linear-gradient(135deg, var(--avail-primary-pale), rgba(16, 185, 129, 0.05));
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.agent-availability .status-box.unavailable {
+  background: linear-gradient(135deg, var(--avail-accent-pale), rgba(245, 158, 11, 0.05));
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.agent-availability .status-box h6 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--avail-muted);
+  margin-bottom: 0.75rem;
+}
+
+.agent-availability .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.agent-availability .status-badge.available {
+  background: var(--avail-primary);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+}
+
+.agent-availability .status-badge.unavailable {
+  background: var(--avail-accent);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+
+.agent-availability .status-badge i {
+  font-size: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCHEDULE SECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .schedule-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--avail-border-light);
+}
+
+.agent-availability .schedule-section h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--avail-ink);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.agent-availability .schedule-section h6 i {
+  color: var(--avail-primary);
+}
+
+/* Form Labels */
+.agent-availability .form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--avail-ink-light);
+  margin-bottom: 0.5rem;
+}
+
+/* Form Controls */
+.agent-availability .form-control {
+  border: 1.5px solid var(--avail-border);
+  border-radius: var(--avail-radius);
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: var(--avail-ink);
+  background: var(--avail-surface);
+  transition: all 0.25s var(--avail-ease);
+}
+
+.agent-availability .form-control:focus {
+  border-color: var(--avail-primary);
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+  outline: none;
+}
+
+.agent-availability .form-control:hover:not(:focus) {
+  border-color: rgba(5, 150, 105, 0.3);
+}
+
+/* Date/Time Inputs */
+.agent-availability input[type="datetime-local"] {
+  position: relative;
+}
+
+.agent-availability input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.agent-availability input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .btn {
+  border-radius: var(--avail-radius);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s var(--avail-ease);
+}
+
+.agent-availability .btn-success {
+  background: linear-gradient(135deg, var(--avail-primary-dark), var(--avail-primary));
+  border: none;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.25);
+}
+
+.agent-availability .btn-success:hover {
+  background: linear-gradient(135deg, var(--avail-primary), var(--avail-primary-light));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+}
+
+.agent-availability .btn-outline-danger {
+  color: var(--avail-danger);
+  border: 1.5px solid var(--avail-danger);
+  background: transparent;
+}
+
+.agent-availability .btn-outline-danger:hover {
+  background: var(--avail-danger);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+}
+
+.agent-availability .btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCHEDULED SLOTS TABLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .slots-section {
+  margin-top: 2.5rem;
+}
+
+.agent-availability .slots-section h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--avail-ink);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.agent-availability .slots-section h6 i {
+  color: var(--avail-primary);
+}
+
+.agent-availability .table-responsive {
+  border-radius: var(--avail-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--avail-border);
+  box-shadow: var(--avail-shadow);
+}
+
+.agent-availability .table {
+  margin: 0;
+}
+
+.agent-availability .table thead {
+  background: linear-gradient(135deg, var(--avail-primary-dark), var(--avail-primary));
+}
+
+.agent-availability .table thead th {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 1.25rem;
+  border: none;
+}
+
+.agent-availability .table-light th {
+  background: linear-gradient(135deg, var(--avail-primary-dark), var(--avail-primary)) !important;
+  color: #fff !important;
+}
+
+.agent-availability .table tbody tr {
+  transition: all 0.2s var(--avail-ease);
+}
+
+.agent-availability .table tbody tr:hover {
+  background: var(--avail-primary-pale);
+}
+
+.agent-availability .table tbody td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--avail-border-light);
+  color: var(--avail-ink);
+  font-size: 0.9rem;
+}
+
+.agent-availability .table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Badge in Table */
+.agent-availability .table .badge {
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+}
+
+.agent-availability .table .badge.bg-primary {
+  background: var(--avail-primary) !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMPTY STATE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .empty-slots {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--avail-bg);
+  border-radius: var(--avail-radius-lg);
+  border: 2px dashed var(--avail-border);
+}
+
+.agent-availability .empty-slots i {
+  font-size: 2.5rem;
+  color: var(--avail-primary);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.agent-availability .empty-slots p {
+  color: var(--avail-muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   QUICK ACTIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.agent-availability .quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--avail-border-light);
+}
+
+.agent-availability .quick-action-card {
+  background: var(--avail-bg);
+  border: 1px solid var(--avail-border-light);
+  border-radius: var(--avail-radius-lg);
+  padding: 1.25rem;
+  text-align: center;
+  transition: all 0.3s var(--avail-ease);
+  cursor: pointer;
+}
+
+.agent-availability .quick-action-card:hover {
+  background: var(--avail-primary-pale);
+  border-color: rgba(5, 150, 105, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--avail-shadow);
+}
+
+.agent-availability .quick-action-card i {
+  font-size: 1.75rem;
+  color: var(--avail-primary);
+  margin-bottom: 0.75rem;
+}
+
+.agent-availability .quick-action-card h6 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--avail-ink);
+  margin: 0 0 0.25rem;
+}
+
+.agent-availability .quick-action-card p {
+  font-size: 0.8rem;
+  color: var(--avail-muted);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .agent-availability .avail-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .agent-availability .avail-card-body {
+    padding: 1.25rem;
+  }
+  
+  .agent-availability .toggle-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .agent-availability .status-box {
+    padding: 1rem;
+  }
+  
+  .agent-availability .table thead th,
+  .agent-availability .table tbody td {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .agent-availability .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .agent-availability .avail-card-header {
+    padding: 1rem;
+  }
+  
+  .agent-availability .avail-card-header h5 {
+    font-size: 1rem;
+  }
+  
+  .agent-availability .form-switch .form-check-input {
+    width: 3rem;
+    height: 1.5rem;
+  }
+  
+  .agent-availability .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
