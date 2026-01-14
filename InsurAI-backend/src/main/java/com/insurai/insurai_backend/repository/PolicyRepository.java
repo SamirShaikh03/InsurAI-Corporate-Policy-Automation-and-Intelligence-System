@@ -35,4 +35,14 @@ public interface PolicyRepository extends JpaRepository<Policy, Long> {
     // Find all expired active policies
     @Query("SELECT p FROM Policy p WHERE p.policyStatus = 'Active' AND p.renewalDate < :currentDate")
     List<Policy> findExpiredActivePolicies(@Param("currentDate") LocalDate currentDate);
+
+    // Count policies by status
+    long countByPolicyStatus(String policyStatus);
+
+    // Count policies expiring within date range with specific status
+    @Query("SELECT COUNT(p) FROM Policy p WHERE p.renewalDate BETWEEN :startDate AND :endDate AND p.policyStatus = :status")
+    long countByRenewalDateBetweenAndPolicyStatus(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("status") String status);
 }
