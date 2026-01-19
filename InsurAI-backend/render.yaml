@@ -1,0 +1,62 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: insurai-backend
+    runtime: docker
+    region: singapore  # Change to your preferred region
+    plan: free  # Change to 'starter' or higher for production
+    branch: main
+    rootDir: InsurAI-backend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      # Database Configuration
+      - key: SPRING_DATASOURCE_URL
+        sync: false  # Set manually in Render dashboard
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
+      # JPA Configuration
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_SHOW_SQL
+        value: false  # Disable in production for performance
+
+      # Supabase Configuration
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ACCESS_KEY
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+
+      # Mail Configuration
+      - key: SPRING_MAIL_USERNAME
+        sync: false
+      - key: SPRING_MAIL_PASSWORD
+        sync: false
+
+      # API Keys
+      - key: COHERE_API_KEY
+        sync: false
+
+      # JWT Secret
+      - key: JWT_SECRET
+        generateValue: true  # Render will auto-generate
+
+      # Java Options
+      - key: JAVA_TOOL_OPTIONS
+        value: "-Xmx512m -Xms256m"
+
+    healthCheckPath: /actuator/health
+    autoDeploy: true  # Auto-deploy on git push
+
+# Uncomment to create a database on Render
+# databases:
+#   - name: insurai-db
+#     region: singapore
+#     plan: free
+#     databaseName: insurai_db
+#     user: insurai_user
+

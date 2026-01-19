@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: insurai-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: insurai_db
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_USER: insurai_user
+      MYSQL_PASSWORD: insurai_pass
+    ports:
+      - "3307:3306"  # Map to 3307 to avoid conflict with local MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - insurai-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: insurai-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/insurai_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: insurai_user
+      SPRING_DATASOURCE_PASSWORD: insurai_pass
+
+      # JPA Configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+
+      # Supabase Configuration (replace with your values)
+      SUPABASE_URL: ${SUPABASE_URL:-https://your-supabase-url}
+      SUPABASE_ACCESS_KEY: ${SUPABASE_ACCESS_KEY:-your-access-key}
+      SUPABASE_SECRET_KEY: ${SUPABASE_SECRET_KEY:-your-secret-key}
+
+      # Mail Configuration (replace with your values)
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME:-your-email@gmail.com}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD:-your-app-password}
+
+      # API Keys (replace with your values)
+      COHERE_API_KEY: ${COHERE_API_KEY:-your-cohere-api-key}
+
+      # JWT Secret (generate a secure one for production)
+      JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-key-min-256-bits}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - insurai-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  insurai-network:
+    driver: bridge
+
