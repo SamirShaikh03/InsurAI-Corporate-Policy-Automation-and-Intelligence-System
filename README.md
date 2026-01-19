@@ -88,6 +88,10 @@ This project is licensed under the MIT License.
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: December 24, 2025
+## 🚧 Project Status
+This project is under active development. Functionality may change, and bugs may be present. Ongoing updates will include fixes and feature enhancements.
 
+---
+
+**Version**: 2.0.0  
+**Last Updated**: January 15, 2026
