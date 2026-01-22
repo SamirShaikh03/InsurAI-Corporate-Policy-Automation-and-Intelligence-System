@@ -242,6 +242,61 @@ The application uses **JPA/Hibernate** with `ddl-auto=update`, which automatical
 
 ---
 
+## ⚙️ How It Works
+
+### 1. Employee Registration & Login
+
+```
+Employee → POST /auth/register → Account Created
+Employee → POST /auth/login → JWT Token Received
+```
+
+### 2. Insurance Claim Workflow
+
+```
+1. Employee logs in → Gets JWT token
+2. Employee views policies → GET /employee/policies
+3. Employee submits claim → POST /employee/claims
+   - System checks for fraud patterns
+   - Claim assigned to HR (load-balanced)
+   - Notification sent to HR
+4. HR reviews claim → GET /hr/claims
+5. HR approves/rejects → POST /hr/claims/approve/{id}
+6. Employee notified → Notification created
+```
+
+### 3. Query Resolution Flow
+
+```
+1. Employee submits query → POST /employee/queries
+2. Available Agent assigned
+3. Agent responds → POST /agent/queries/respond/{id}
+4. Employee notified
+```
+
+### 4. AI Chatbot Interaction
+
+```
+1. Employee sends message → POST /employee/chatbot
+2. System analyzes message
+3. Checks local data (policies, claims)
+4. If needed, calls Cohere AI
+5. Response returned to employee
+```
+
+### 5. Fraud Detection
+
+```
+Claim Submitted → Fraud Service Analyzes:
+  - Amount vs coverage limits
+  - Claim frequency
+  - Suspicious patterns
+→ If suspicious: fraud_flag = true, fraud_reason set
+→ HR/Admin see fraud-flagged claims
+```
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.
