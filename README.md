@@ -4,81 +4,241 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [Database Configuration](#database-configuration)
+- [User Roles & Permissions](#user-roles--permissions)
+- [Security](#security)
+- [How It Works](#how-it-works)
+- [Contributing](#contributing)
+
 ## 📋 Overview
 
 **InsurAI** is an enterprise-grade Corporate Policy Automation and Intelligence System designed to streamline insurance policy management, claims processing, and employee benefits administration within corporate environments.
 
 ---
 
-## 🏗️ Repository Structure
+## ✨ Features
+
+### Core Features
+
+| Feature | Description |
+|---------|-------------|
+| **Multi-Role Authentication** | Secure JWT-based authentication for Employees, Agents, HR, and Admins |
+| **Policy Management** | Create, update, and manage insurance policies with document uploads |
+| **Claims Processing** | Submit, track, approve/reject insurance claims with automated fraud detection |
+| **Employee Query System** | Employees can raise queries which are handled by agents |
+| **AI-Powered Chatbot** | Integrated Cohere AI chatbot for employee assistance |
+| **Notification System** | In-app notifications for claim updates and important events |
+| **Audit Logging** | Complete audit trail of all system activities |
+| **Document Management** | Secure file uploads to Supabase S3 storage |
+| **Fraud Detection** | Automated fraud flagging system for suspicious claims |
+
+---
+
+
+## 🛠 Technology Stack
+
+### Backend
+- **Framework:** Spring Boot 3.5.5
+- **Language:** Java 21
+- **Security:** Spring Security with JWT Authentication
+- **ORM:** Spring Data JPA with Hibernate
+- **Database:** MySQL
+- **Validation:** Spring Boot Validation
+- **Build Tool:** Maven
+
+### External Services
+- **Cloud Storage:** Supabase S3 (for document storage)
+- **AI Integration:** Cohere API (for chatbot)
+- **Email Service:** SMTP (Gmail)
+
+### Key Libraries
+- **JWT:** jjwt-api 0.11.5
+- **HTTP Client:** Unirest 3.13.6
+- **AWS SDK:** 2.20.38 (for S3 operations)
+- **Lombok:** For reducing boilerplate code
+
+---
+
+## 🏗 Architecture
+
+The application follows a **layered architecture** pattern:
 
 ```
-InsurAI-Corporate-Policy-Automation-and-Intelligence-System/
-└── Insurai-backend/          # Spring Boot Backend Application
-    ├── src/
-    │   ├── main/
-    │   │   ├── java/com/insurai/insurai_backend/
-    │   │   │   ├── config/           # Security, JWT, CORS Configuration
-    │   │   │   ├── controller/       # REST API Controllers
-    │   │   │   ├── model/            # JPA Entities
-    │   │   │   ├── repository/       # Data Access Layer
-    │   │   │   └── service/          # Business Logic Layer
-    │   │   └── resources/
-    │   │       └── application.properties
-    │   └── test/
-    ├── pom.xml                # Maven Dependencies
-    └── README.md              # Backend documentation
+┌─────────────────────────────────────────────────────────────┐
+│                    Frontend (React)                         │
+├─────────────────────────────────────────────────────────────┤
+│                         REST API                            │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  │             │  │   Security  │  │ JWT Auth Filters    │  │
+│  │ Controllers │  │   Config    │  │ (Employee/HR/Admin/ │  │
+│  │             │  │             │  │  Agent)             │  │
+│  └──────┬──────┘  └─────────────┘  └─────────────────────┘  │
+│         │                                                   │
+│  ┌──────▼──────┐                                            │
+│  │  Services   │      (Business Logic Layer)                │
+│  └──────┬──────┘                                            │
+│         │                                                   │
+│  ┌──────▼──────┐                                            │
+│  │Repositories │      (Data Access Layer - JPA)             │
+│  └──────┬──────┘                                            │
+│         │                                                   │
+├─────────▼───────────────────────────────────────────────────┤
+│                     MySQL Database                          │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🚀 Key Features
+## 📁 Project Structure
 
-- **Authentication & Authorization** - JWT-based security with role-based access control
-- **Policy Management** - Complete CRUD operations for insurance policies
-- **Claims Processing** - Multi-stage claim workflow with document uploads
-- **Employee Query System** - Query submission and tracking
-- **AI-Powered Chatbot** - Cohere AI integration for intelligent responses
-- **Notifications System** - Real-time alerts and updates
-- **Audit Logging** - Comprehensive activity tracking
+```
+insurai-backend/
+├── src/
+│   ├── main/
+│   │   ├── java/com/insurai/insurai_backend/
+│   │   │   ├── InsuraiBackendApplication.java                  # Main entry point
+│   │   │   │
+│   │   │   ├── config/                                         # Configuration classes
+│   │   │   │   ├── SecurityConfig.java                         # Spring Security configuration
+│   │   │   │   ├── JwtUtil.java                                # JWT token utilities
+│   │   │   │   ├── EmployeeJwtAuthenticationFilter.java
+│   │   │   │   ├── AgentJwtAuthenticationFilter.java
+│   │   │   │   ├── HrJwtAuthenticationFilter.java
+│   │   │   │   ├── AdminJwtAuthenticationFilter.java
+│   │   │   │   ├── CorsConfig.java                             # CORS configuration
+│   │   │   │   ├── PasswordConfig.java                         # Password encoder config
+│   │   │   │   └── WebConfig.java                              # Web MVC configuration
+│   │   │   │
+│   │   │   ├── controller/                                     # REST API Controllers
+│   │   │   │   ├── AuthController.java                         # Employee auth endpoints
+│   │   │   │   ├── AdminController.java                        # Admin operations
+│   │   │   │   ├── HrController.java                           # HR operations
+│   │   │   │   ├── AgentController.java                        # Agent operations
+│   │   │   │   ├── EmployeeController.java                     # Employee operations
+│   │   │   │   ├── ClaimController.java                        # Claims management
+│   │   │   │   ├── PolicyController.java                       # Policy management
+│   │   │   │   ├── ChatbotController.java                      # AI Chatbot
+│   │   │   │   ├── NotificationController.java                 # Notifications
+│   │   │   │   └── EmployeeQueryController.java                # Employee queries
+│   │   │   │
+│   │   │   ├── model/                                          # Entity classes
+│   │   │   │   ├── Employee.java                               # Employee entity
+│   │   │   │   ├── Admin.java                                  # Admin entity
+│   │   │   │   ├── Hr.java                                     # HR entity
+│   │   │   │   ├── Agent.java                                  # Agent entity
+│   │   │   │   ├── Policy.java                                 # Insurance policy entity
+│   │   │   │   ├── Claim.java                                  # Insurance claim entity
+│   │   │   │   ├── EmployeeQuery.java                          # Query entity
+│   │   │   │   ├── Notification.java                           # Notification entity
+│   │   │   │   ├── AuditLog.java                               # Audit log entity
+│   │   │   │   └── AgentAvailability.java                      # Agent availability
+│   │   │   │
+│   │   │   ├── repository/                                     # JPA Repositories
+│   │   │   │   └── (Repository interfaces)
+│   │   │   │
+│   │   │   └── service/                                        # Business Logic Services
+│   │   │       ├── EmployeeService.java
+│   │   │       ├── AdminService.java
+│   │   │       ├── HrService.java
+│   │   │       ├── AgentService.java
+│   │   │       ├── ClaimService.java
+│   │   │       ├── PolicyService.java
+│   │   │       ├── FraudService.java
+│   │   │       ├── NotificationService.java
+│   │   │       ├── AuditLogService.java
+│   │   │       └── SupabaseStorageService.java
+│   │   │
+│   │   └── resources/
+│   │       └── application.properties                          # Application configuration
+│   │
+│   └── test/                                                   # Test classes
+│
+├── pom.xml                                                     # Maven dependencies
+├── mvnw / mvnw.cmd                                             # Maven wrapper
+└── README.md                                                   # This file
+```
+---
+
+## 🗄 Database Configuration
+
+### Database Schema
+
+The application uses **JPA/Hibernate** with `ddl-auto=update`, which automatically creates/updates tables based on entity classes.
+
+### Key Tables
+
+| Table | Description |
+|-------|-------------|
+| `employees` | Employee user accounts |
+| `admins` | Admin user accounts |
+| `hrs` | HR user accounts |
+| `agents` | Agent user accounts |
+| `policies` | Insurance policy definitions |
+| `claims` | Insurance claims submitted by employees |
+| `employee_queries` | Queries raised by employees |
+| `notifications` | System notifications |
+| `audit_logs` | Activity audit trail |
+| `agent_availability` | Agent availability schedules |
 
 ---
 
-## 🛠️ Technology Stack
+## 👥 User Roles & Permissions
 
-- **Framework**: Spring Boot 3.5.5
-- **Language**: Java 21
-- **Security**: Spring Security + JWT
-- **Database**: MySQL 8.0
-- **Build Tool**: Maven
-- **External Services**: Supabase S3, Cohere AI
+### Role Hierarchy
+
+```
+┌─────────────────┐
+│     ADMIN       │  Full system access
+├─────────────────┤
+│       HR        │  Claims approval, fraud review
+├─────────────────┤
+│     AGENT       │  Query handling, availability management
+├─────────────────┤
+│    EMPLOYEE     │  Policy viewing, claims submission, chatbot
+└─────────────────┘
+```
+
+### Role Capabilities
+
+| Capability | Employee | Agent | HR | Admin |
+|------------|:--------:|:-----:|:--:|:-----:|
+| View Policies | ✅ | ❌ | ❌ | ✅ |
+| Submit Claims | ✅ | ❌ | ❌ | ❌ |
+| Approve/Reject Claims | ❌ | ❌ | ✅ | ✅ |
+| Handle Queries | ❌ | ✅ | ❌ | ❌ |
+| View Audit Logs | ❌ | ❌ | ❌ | ✅ |
+| Register Users | ❌ | ❌ | ❌ | ✅ |
+| Use AI Chatbot | ✅ | ❌ | ❌ | ❌ |
+| Manage Policies | ❌ | ❌ | ❌ | ✅ |
 
 ---
-
-## 📦 Getting Started
-
-### Prerequisites
-- Java 21+
-- Maven 3.8+
-- MySQL 8.0+
 
 ## 🔐 Security
 
-- JWT-based authentication
-- Role-based authorization (Employee, Agent, HR, Admin)
-- BCrypt password encryption
-- CORS configuration
+### Authentication Flow
 
----
+1. **User Login** → Validates credentials
+2. **JWT Token Generated** → Contains user email and role
+3. **Token Sent to Client** → Stored in frontend
+4. **Subsequent Requests** → Include JWT in `Authorization: Bearer <token>` header
+5. **JWT Filter Validates** → Checks token validity and role permissions
 
-## 👥 User Roles
+### Security Features
 
-| Role | Permissions |
-|------|-------------|
-| **Employee** | View policies, submit claims |
-| **Agent** | Manage policies, assist employees |
-| **HR** | Approve enrollments, manage policies |
-| **Admin** | Full system access |
+- **JWT Authentication:** Stateless token-based authentication
+- **Role-Based Access Control:** Endpoints protected based on user roles
+- **Password Encryption:** BCrypt password hashing
+- **CORS Configuration:** Restricted to allowed origins
+- **CSRF Protection:** Disabled for REST API (JWT provides protection)
 
 ---
 
@@ -94,4 +254,4 @@ This project is under active development. Functionality may change, and bugs may
 ---
 
 **Version**: 2.0.0  
-**Last Updated**: January 15, 2026
+**Last Updated**: January 22, 2026
