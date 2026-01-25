@@ -14,11 +14,15 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins(
+                            "http://localhost:5173",              // Local development
+                            "http://localhost:8080",              // Alternative local port
+                            "https://*.vercel.app"                // Production frontend (Vercel)
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)
-                        .maxAge(3600); // optional: cache preflight for 1 hour
+                        .maxAge(3600); // Cache preflight for 1 hour
             }
         };
     }
