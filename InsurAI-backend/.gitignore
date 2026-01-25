@@ -71,19 +71,25 @@ Desktop.ini
 # Application specific
 uploads/
 uploads/*
+
+# Sensitive configuration files (DO NOT COMMIT)
 application-local.properties
 application-prod.properties
 application-dev.properties
+secrets.properties
+credentials.properties
+passwords.txt
 
-# Sensitive data - DO NOT COMMIT THESE!
-**/application.properties
-!**/application.properties.example
-**/*.properties
-!**/application.properties.example
+# Environment files - DO NOT COMMIT THESE!
 *.env
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+
+# Note: application.properties and application-postgresql.properties ARE tracked
+# They should ONLY contain ${ENV_VAR} references, never hardcoded credentials!
 
 # Database files
 *.db
@@ -105,11 +111,6 @@ application-dev.properties
 *.pem
 *.p12
 *.jks
-# Note: Avoid patterns like *secret* or *password* as they can exclude legitimate Java classes
-# Use specific patterns instead for sensitive files
-secrets.properties
-credentials.properties
-passwords.txt
 
 # Documentation build
 docs/_build/
