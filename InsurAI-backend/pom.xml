@@ -182,8 +182,6 @@
 					<source>21</source>
 					<target>21</target>
 					<release>21</release>
-					<fork>true</fork>
-					<executable>C:\Program Files\Java\jdk-21\bin\javac.exe</executable>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
