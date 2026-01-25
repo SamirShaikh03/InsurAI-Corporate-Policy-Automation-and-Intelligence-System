@@ -105,9 +105,11 @@ application-dev.properties
 *.pem
 *.p12
 *.jks
-*secret*
-*password*
-*credential*
+# Note: Avoid patterns like *secret* or *password* as they can exclude legitimate Java classes
+# Use specific patterns instead for sensitive files
+secrets.properties
+credentials.properties
+passwords.txt
 
 # Documentation build
 docs/_build/
