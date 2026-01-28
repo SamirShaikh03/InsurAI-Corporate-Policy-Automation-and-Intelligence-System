@@ -9,13 +9,22 @@ services:
     rootDir: InsurAI-backend
     dockerfilePath: ./Dockerfile
     envVars:
-      # Database Configuration
-      - key: SPRING_DATASOURCE_URL
+      # CRITICAL: Activate PostgreSQL profile
+      - key: SPRING_PROFILES_ACTIVE
+        value: postgresql
+
+      # Database Configuration (PostgreSQL on Render)
+      # DATABASE_URL must be in format: jdbc:postgresql://host:port/database
+      - key: DATABASE_URL
         sync: false  # Set manually in Render dashboard
-      - key: SPRING_DATASOURCE_USERNAME
+      - key: DB_USERNAME
         sync: false
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         sync: false
+      - key: DB_DRIVER
+        value: org.postgresql.Driver
+      - key: HIBERNATE_DIALECT
+        value: org.hibernate.dialect.PostgreSQLDialect
 
       # JPA Configuration
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
