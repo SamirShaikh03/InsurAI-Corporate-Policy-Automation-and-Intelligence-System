@@ -16,16 +16,16 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Service
 public class SupabaseStorageService {
 
-    @Value("${supabase.url}")
+    @Value("${supabase.url:}")
     private String supabaseUrl; //
 
-    @Value("${supabase.accessKey}")
+    @Value("${supabase.accessKey:}")
     private String accessKey;
 
-    @Value("${supabase.secretKey}")
+    @Value("${supabase.secretKey:}")
     private String secretKey;
 
-    @Value("${supabase.bucket}")
+    @Value("${supabase.bucket:Insur_AI}")
     private String bucketName;
 
     @Value("${supabase.region:ap-south-1}")
@@ -34,17 +34,23 @@ public class SupabaseStorageService {
     private S3Client s3Client;
 
     private void initS3Client() {
-        if (s3Client == null) {
-            s3Client = S3Client.builder()
-                    .endpointOverride(java.net.URI.create(supabaseUrl))
-                    .credentialsProvider(
-                            StaticCredentialsProvider.create(
-                                    AwsBasicCredentials.create(accessKey, secretKey)
-                            )
-                    )
-                    .region(Region.of(region))
-                    .build();
+        if (s3Client != null) {
+            return;
         }
+        if (supabaseUrl == null || supabaseUrl.isBlank()
+                || accessKey == null || accessKey.isBlank()
+                || secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException("Supabase storage is not configured. Set SUPABASE_URL, SUPABASE_ACCESS_KEY, and SUPABASE_SECRET_KEY.");
+        }
+        s3Client = S3Client.builder()
+                .endpointOverride(java.net.URI.create(supabaseUrl))
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(
+                                AwsBasicCredentials.create(accessKey, secretKey)
+                        )
+                )
+                .region(Region.of(region))
+                .build();
     }
 
     public String uploadFile(MultipartFile file, String path) {
