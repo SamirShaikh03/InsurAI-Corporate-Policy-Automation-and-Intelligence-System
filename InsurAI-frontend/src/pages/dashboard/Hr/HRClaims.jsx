@@ -1,5 +1,6 @@
 // src/components/hr/HRClaims.jsx
 import React, { useState, useMemo } from "react";
+import { API_BASE_URL } from "../../../config";
 
 export default function HRClaims({
   pendingClaims,
@@ -405,7 +406,7 @@ export default function HRClaims({
                                 const filename = doc.split('/').pop();
                                 return (
                                   <li key={idx}>
-                                    <a className="dropdown-item" href={`http://localhost:8080/api/files/download/${filename}`} target="_blank" rel="noreferrer">
+                                    <a className="dropdown-item" href={`${API_BASE_URL}/api/files/download/${filename}`} target="_blank" rel="noreferrer">
                                       <i className="bi bi-download me-2"></i>Doc {idx + 1}
                                     </a>
                                   </li>
@@ -567,7 +568,7 @@ export default function HRClaims({
                       const filename = doc.split('/').pop();
                       const displayName = filename.includes('_') ? filename.substring(filename.indexOf('_') + 1) : filename;
                       return (
-                        <a key={idx} href={`http://localhost:8080/api/files/download/${filename}`} target="_blank" rel="noreferrer" className="hr-doc-item">
+                        <a key={idx} href={`${API_BASE_URL}/api/files/download/${filename}`} target="_blank" rel="noreferrer" className="hr-doc-item">
                           <i className="bi bi-file-earmark"></i>
                           <span>{displayName || `Document ${idx + 1}`}</span>
                           <i className="bi bi-download" style={{ marginLeft: 'auto' }}></i>

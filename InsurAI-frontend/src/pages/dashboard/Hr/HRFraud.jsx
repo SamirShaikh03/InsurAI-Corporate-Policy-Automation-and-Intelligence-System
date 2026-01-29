@@ -5,6 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { API_BASE_URL } from "../../../config";
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +30,7 @@ const HRFraud = () => {
   const fetchFraudAlerts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/hr/claims/fraud", {
+      const response = await fetch(`${API_BASE_URL}/hr/claims/fraud", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -54,7 +55,7 @@ const HRFraud = () => {
   const fetchEmployees = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8080/employees", {
+      const res = await fetch(`${API_BASE_URL}/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
@@ -468,7 +469,7 @@ const HRFraud = () => {
                             const filename = doc.split('/').pop();
                             const displayName = filename.includes('_') ? filename.substring(filename.indexOf('_') + 1) : filename;
                             return (
-                              <a key={i} href={`http://localhost:8080/api/files/download/${filename}`} target="_blank" rel="noreferrer" className="hr-doc-item">
+                              <a key={i} href={`${API_BASE_URL}/api/files/download/${filename}`} target="_blank" rel="noreferrer" className="hr-doc-item">
                                 <i className="bi bi-file-earmark"></i>
                                 <span>{displayName || `Document ${i + 1}`}</span>
                                 <i className="bi bi-download" style={{ marginLeft: 'auto' }}></i>

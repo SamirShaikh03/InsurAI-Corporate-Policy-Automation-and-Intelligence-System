@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../../config";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import jsPDF from "jspdf";
@@ -124,7 +125,7 @@ export default function HRDashboard() {
       if (!token) return;
 
       const response = await fetch(
-        `http://localhost:8080/notifications/user/${loggedInHrId}`,
+        `${API_BASE_URL}/notifications/user/${loggedInHrId}`,
         {
           params: { role: "HR" },
           headers: { Authorization: `Bearer ${token}` },
@@ -143,7 +144,7 @@ export default function HRDashboard() {
   const fetchEmployees = useCallback(async () => {
     try {
       setLoading(prev => ({ ...prev, employees: true }));
-      const response = await fetch("http://localhost:8080/auth/employees");
+      const response = await fetch(`${API_BASE_URL}/auth/employees");
       if (!response.ok) throw new Error('Failed to fetch employees');
       const data = await response.json();
       setEmployees(Array.isArray(data) ? data : []);
@@ -160,7 +161,7 @@ export default function HRDashboard() {
 
   const fetchHRList = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8080/hr");
+      const response = await fetch(`${API_BASE_URL}/hr");
       if (!response.ok) throw new Error('Failed to fetch HR list');
       const data = await response.json();
       setHrs(Array.isArray(data) ? data : []);
@@ -176,7 +177,7 @@ export default function HRDashboard() {
     try {
       setLoading(prev => ({ ...prev, policies: true }));
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/employee/policies", {
+      const response = await fetch(`${API_BASE_URL}/employee/policies", {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
 
@@ -222,7 +223,7 @@ export default function HRDashboard() {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/hr/claims?hrId=${loggedInHrId}`, {
+      const response = await fetch(`${API_BASE_URL}/hr/claims?hrId=${loggedInHrId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -361,7 +362,7 @@ export default function HRDashboard() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      await fetch(`http://localhost:8080/notifications/${id}/read`, {
+      await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -464,7 +465,7 @@ export default function HRDashboard() {
     
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8080/hr/claims/approve/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/hr/claims/approve/${id}`, {
         method: "POST",
         headers: { 
           "Authorization": `Bearer ${token}`,
@@ -511,7 +512,7 @@ export default function HRDashboard() {
     
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8080/hr/claims/reject/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/hr/claims/reject/${id}`, {
         method: "POST",
         headers: { 
           "Authorization": `Bearer ${token}`,
@@ -597,7 +598,7 @@ export default function HRDashboard() {
       const docLinks = c.documents?.length > 0
         ? c.documents.map(d => {
             const filename = d.split('/').pop();
-            return `http://localhost:8080/api/files/download/${filename}`;
+            return `${API_BASE_URL}/api/files/download/${filename}`;
           }).join(' | ')
         : 'No documents';
 

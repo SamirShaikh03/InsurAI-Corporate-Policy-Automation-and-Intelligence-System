@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../config";
 import AuthLayout from "./components/AuthLayout";
 import empAuthImage from "../../assets/emp-auth-image.jpg";
 import { InlineSpinner } from "../../components/loading";
@@ -83,7 +84,7 @@ export default function ResetPassword() {
     setLoading(true);
     try {
       const res = await axios.post(
-        `http://localhost:8080/auth/reset-password/${token}`,
+        `${API_BASE_URL}/auth/reset-password/${token}`,
         { newPassword: password }
       );
 

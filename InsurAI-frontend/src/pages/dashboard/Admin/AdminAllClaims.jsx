@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { API_BASE_URL } from "../../../config";
 import {
   BarChart,
   Bar,
@@ -688,7 +689,7 @@ const AdminAllClaims = ({ claims = [] }) => {
                               <li key={idx}>
                                 <a
                                   className="dropdown-item"
-                                  href={`http://localhost:8080${doc}`}
+                                  href={`${API_BASE_URL}${doc}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
@@ -839,7 +840,7 @@ const AdminAllClaims = ({ claims = [] }) => {
                     {viewClaim.documents.map((doc, idx) => (
                       <a
                         key={idx}
-                        href={`http://localhost:8080${doc}`}
+                        href={`${API_BASE_URL}${doc}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="aac-document-link"

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { API_BASE_URL } from "../../../config";
 import "./AgentQueries.css";
 
 export default function AgentQueries({ 
@@ -505,7 +506,7 @@ export default function AgentQueries({
                                   onClick={async () => {
                                     try {
                                       await axios.put(
-                                        `http://localhost:8080/agent/queries/respond/${query.id}`,
+                                        `${API_BASE_URL}/agent/queries/respond/${query.id}`,
                                         { response: query.response || "Resolved" },
                                         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
                                       );

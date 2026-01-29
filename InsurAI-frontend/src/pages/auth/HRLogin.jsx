@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 import AuthLayout from "./components/AuthLayout";
 import empAuthImage from "../../assets/hr-auth-image.jpg";
 import { InlineSpinner } from "../../components/loading";
@@ -20,7 +21,7 @@ export default function HrLogin() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8080/hr/login", {
+      const res = await fetch(`${API_BASE_URL}/hr/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

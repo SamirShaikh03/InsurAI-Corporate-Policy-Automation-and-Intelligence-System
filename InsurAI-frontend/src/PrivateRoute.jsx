@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import { API_BASE_URL } from "./config";
 
 // ------------------ PrivateRoute for both Admin and Employee ------------------
 const PrivateRoute = ({ children, role }) => {
@@ -34,7 +35,7 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:8080/admin/login", {
+      const res = await fetch(`${API_BASE_URL}/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../config";
 import AuthLayout from "./components/AuthLayout";
 import empAuthImage from "../../assets/emp-auth-image.jpg";
 import { InlineSpinner } from "../../components/loading";
@@ -22,7 +23,7 @@ export default function EmployeeLogin() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:8080/auth/login", {
+      const res = await axios.post(`${API_BASE_URL}/auth/login", {
         email: email.trim().toLowerCase(),
         password,
       });

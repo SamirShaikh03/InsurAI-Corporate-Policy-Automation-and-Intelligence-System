@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 import AuthLayout from "./components/AuthLayout";
 import empAuthImage from "../../assets/emp-auth-image.jpg";
 import { InlineSpinner } from "../../components/loading";
@@ -21,7 +22,7 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8080/auth/forgot-password", { 
+      const res = await axios.post(`${API_BASE_URL}/auth/forgot-password", { 
         email: email.trim().toLowerCase() 
       });
 

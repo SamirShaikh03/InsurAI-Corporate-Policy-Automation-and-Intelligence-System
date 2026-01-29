@@ -1,6 +1,7 @@
 // src/components/hr/HRNotification.jsx
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 
 export default function HRNotification({ currentHrId }) {
   const [notifications, setNotifications] = useState([]);
@@ -26,7 +27,7 @@ export default function HRNotification({ currentHrId }) {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/notifications/user/${currentHrId}`,
+          `${API_BASE_URL}/notifications/user/${currentHrId}`,
           {
             params: { role: "HR" },
             headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +58,7 @@ export default function HRNotification({ currentHrId }) {
       }
 
       const response = await axios.put(
-        `http://localhost:8080/notifications/${id}/read`,
+        `${API_BASE_URL}/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -80,7 +81,7 @@ export default function HRNotification({ currentHrId }) {
       const token = localStorage.getItem("token");
       const promises = Array.from(selectedNotifications).map(id =>
         axios.put(
-          `http://localhost:8080/notifications/${id}/read`,
+          `${API_BASE_URL}/notifications/${id}/read`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         )
@@ -107,7 +108,7 @@ export default function HRNotification({ currentHrId }) {
       const token = localStorage.getItem("token");
       const promises = unreadNotifications.map(notification =>
         axios.put(
-          `http://localhost:8080/notifications/${notification.id}/read`,
+          `${API_BASE_URL}/notifications/${notification.id}/read`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         )
