@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AgentRegister from "../../auth/AgentRegister";
@@ -59,7 +60,7 @@ export default function AdminDashboard() {
       if (!token || !adminId) return;
 
       const response = await axios.get(
-        `http://localhost:8080/notifications/user/${adminId}`,
+        `${API_BASE_URL}/notifications/user/${adminId}`,
         {
           params: { role: "Admin" },
           headers: { Authorization: `Bearer ${token}` },
@@ -80,7 +81,7 @@ export default function AdminDashboard() {
       if (!token) return;
 
       await axios.put(
-        `http://localhost:8080/notifications/${id}/read`,
+        `${API_BASE_URL}/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -103,7 +104,7 @@ export default function AdminDashboard() {
       const token = localStorage.getItem("token");
 
       // Fetch agents
-      const agentsRes = await axios.get("http://localhost:8080/agent", {
+      const agentsRes = await axios.get(`${API_BASE_URL}/agent`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const agentsData = Array.isArray(agentsRes.data) ? agentsRes.data : [];
@@ -116,7 +117,7 @@ export default function AdminDashboard() {
       }));
 
       // Fetch employees
-      const employeesRes = await axios.get("http://localhost:8080/auth/employees", {
+      const employeesRes = await axios.get(`${API_BASE_URL}/auth/employees`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const employeesData = Array.isArray(employeesRes.data) ? employeesRes.data : [];
@@ -129,7 +130,7 @@ export default function AdminDashboard() {
       }));
 
       // Fetch HRs
-      const hrsRes = await axios.get("http://localhost:8080/hr", {
+      const hrsRes = await axios.get(`${API_BASE_URL}/hr`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const hrsData = Array.isArray(hrsRes.data) ? hrsRes.data : [];
@@ -168,7 +169,7 @@ export default function AdminDashboard() {
   const handleRegisterHR = async (hrData) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:8080/admin/hr/register", hrData, {
+      await axios.post(`${API_BASE_URL}/admin/hr/register`, hrData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNewHR({ name: "", email: "", password: "" });
@@ -184,7 +185,7 @@ export default function AdminDashboard() {
   const handleRegisterAgent = async (agentData) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:8080/admin/agent/register", agentData, {
+      await axios.post(`${API_BASE_URL}/admin/agent/register`, agentData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNewAgent({ name: "", email: "", password: "" });
@@ -210,7 +211,7 @@ export default function AdminDashboard() {
       const roleEndpoint = user.role === "Employee" ? "employee" :
                           user.role === "HR" ? "hr" : "agent";
 
-      await axios.put(`http://localhost:8080/admin/${roleEndpoint}/${user.id}`, {
+      await axios.put(`${API_BASE_URL}/admin/${roleEndpoint}/${user.id}`, {
         name: newName || user.name,
         email: newEmail || user.email
       }, {
@@ -244,7 +245,7 @@ export default function AdminDashboard() {
       const roleEndpoint = role === "Employee" ? "employee" :
                           role === "HR" ? "hr" : "agent";
 
-      await axios.delete(`http://localhost:8080/admin/${roleEndpoint}/${userId}`, {
+      await axios.delete(`${API_BASE_URL}/admin/${roleEndpoint}/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -283,11 +284,11 @@ export default function AdminDashboard() {
         newStatus,
         user,
         roleEndpoint,
-        endpoint: `http://localhost:8080/admin/${roleEndpoint}/${userId}/status`
+        endpoint: `${API_BASE_URL}/admin/${roleEndpoint}/${userId}/status`
       });
 
       const response = await axios.put(
-        `http://localhost:8080/admin/${roleEndpoint}/${userId}/status`,
+        `${API_BASE_URL}/admin/${roleEndpoint}/${userId}/status`,
         { status: newStatus },
         {
           headers: {
@@ -332,7 +333,7 @@ export default function AdminDashboard() {
       if (!token) return;
 
       // Fetch claims
-      const claimsRes = await fetch("http://localhost:8080/admin/claims", {
+      const claimsRes = await fetch(`${API_BASE_URL}/admin/claims`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!claimsRes.ok) {
@@ -342,19 +343,19 @@ export default function AdminDashboard() {
       const claimsData = await claimsRes.json();
 
       // Fetch employees
-      const empRes = await fetch("http://localhost:8080/auth/employees", {
+      const empRes = await fetch(`${API_BASE_URL}/auth/employees`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const employees = await empRes.json();
 
       // Fetch HRs
-      const hrRes = await fetch("http://localhost:8080/hr", {
+      const hrRes = await fetch(`${API_BASE_URL}/hr`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const hrs = await hrRes.json();
 
       // Fetch policies
-      const policyRes = await fetch("http://localhost:8080/admin/policies", {
+      const policyRes = await fetch(`${API_BASE_URL}/admin/policies`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const policiesData = await policyRes.json();

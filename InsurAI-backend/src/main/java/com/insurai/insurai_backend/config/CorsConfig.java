@@ -16,7 +16,6 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                             "http://localhost:5173",              // Local development
-                            "http://localhost:8080",              // Alternative local port
                             "https://insur-f17uhvf6b-samir-shaikhs-projects-a76403b0.vercel.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
