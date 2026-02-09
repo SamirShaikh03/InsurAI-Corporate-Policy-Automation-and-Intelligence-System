@@ -22,8 +22,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth/forgot-password", { 
-        email: email.trim().toLowerCase() 
+      const res = await axios.post(`${API_BASE_URL}/auth/forgot-password`, {
+        email: email.trim().toLowerCase()
       });
 
       // Backend now returns a plain string message, so handle accordingly

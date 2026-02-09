@@ -23,7 +23,7 @@ export default function EmployeeLogin() {
     setError("");
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth/login", {
+      const res = await axios.post(`${API_BASE_URL}/auth/login`, {
         email: email.trim().toLowerCase(),
         password,
       });
