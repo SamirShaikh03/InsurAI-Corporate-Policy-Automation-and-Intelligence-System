@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AuthLayout from "./components/AuthLayout";
-import empAuthImage from "../../assets/admin-auth-image.jpg";
+import empAuthImage from "../../assets/admin-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
 import "bootstrap/dist/css/bootstrap.min.css";
 

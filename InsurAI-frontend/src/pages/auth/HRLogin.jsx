@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
 import AuthLayout from "./components/AuthLayout";
-import empAuthImage from "../../assets/hr-auth-image.jpg";
+import empAuthImage from "../../assets/hr-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
 import "bootstrap/dist/css/bootstrap.min.css";
 

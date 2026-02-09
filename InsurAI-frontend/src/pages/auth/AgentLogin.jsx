@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AuthLayout from "./components/AuthLayout";
-import agentAuthImage from "../../assets/agent-auth-image.jpg";
+import agentAuthImage from "../../assets/agent-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
 import "bootstrap/dist/css/bootstrap.min.css";
 

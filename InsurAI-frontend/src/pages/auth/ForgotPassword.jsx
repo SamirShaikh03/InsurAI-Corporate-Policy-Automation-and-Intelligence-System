@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
 import AuthLayout from "./components/AuthLayout";
-import empAuthImage from "../../assets/emp-auth-image.jpg";
+import empAuthImage from "../../assets/emp-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/enterprise-theme.css";
