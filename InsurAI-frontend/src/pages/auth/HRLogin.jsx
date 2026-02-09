@@ -21,7 +21,7 @@ export default function HrLogin() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/hr/login", {
+      const res = await fetch(`${API_BASE_URL}/hr/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

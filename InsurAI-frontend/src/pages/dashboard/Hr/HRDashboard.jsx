@@ -144,7 +144,7 @@ export default function HRDashboard() {
   const fetchEmployees = useCallback(async () => {
     try {
       setLoading(prev => ({ ...prev, employees: true }));
-      const response = await fetch(`${API_BASE_URL}/auth/employees");
+      const response = await fetch(`${API_BASE_URL}/auth/employees`);
       if (!response.ok) throw new Error('Failed to fetch employees');
       const data = await response.json();
       setEmployees(Array.isArray(data) ? data : []);
@@ -161,7 +161,7 @@ export default function HRDashboard() {
 
   const fetchHRList = useCallback(async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/hr");
+      const response = await fetch(`${API_BASE_URL}/hr`);
       if (!response.ok) throw new Error('Failed to fetch HR list');
       const data = await response.json();
       setHrs(Array.isArray(data) ? data : []);
@@ -177,7 +177,7 @@ export default function HRDashboard() {
     try {
       setLoading(prev => ({ ...prev, policies: true }));
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/employee/policies", {
+      const response = await fetch(`${API_BASE_URL}/employee/policies`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
 

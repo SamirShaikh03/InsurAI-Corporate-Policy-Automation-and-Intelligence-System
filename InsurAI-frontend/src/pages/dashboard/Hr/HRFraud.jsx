@@ -30,7 +30,7 @@ const HRFraud = () => {
   const fetchFraudAlerts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/hr/claims/fraud", {
+      const response = await fetch(`${API_BASE_URL}/hr/claims/fraud`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ const HRFraud = () => {
   const fetchEmployees = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE_URL}/employees", {
+      const res = await fetch(`${API_BASE_URL}/employees`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);

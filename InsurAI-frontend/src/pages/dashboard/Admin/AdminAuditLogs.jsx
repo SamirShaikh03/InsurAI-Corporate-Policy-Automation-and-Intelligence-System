@@ -31,7 +31,7 @@ const AdminAuditLogs = ({ themeColors }) => {
   // Fetch logs from backend
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_BASE_URL}/admin/audit/logs", {
+    fetch(`${API_BASE_URL}/admin/audit/logs`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
