@@ -1,6 +1,7 @@
 // src/components/notification/EmployeeNotification.jsx
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./EmployeeNotification.css";
 
@@ -29,8 +30,8 @@ export default function EmployeeNotification({ userDbId, token }) {
       try {
         const url =
           filter === "unread"
-            ? `http://localhost:8080/notifications/user/${Number(userDbId)}/unread`
-            : `http://localhost:8080/notifications/user/${Number(userDbId)}`;
+            ? `${API_BASE_URL}/notifications/user/${Number(userDbId)}/unread`
+            : `${API_BASE_URL}/notifications/user/${Number(userDbId)}`;
 
         const response = await axios.get(url, {
           params: { role: "EMPLOYEE" },
@@ -52,14 +53,27 @@ export default function EmployeeNotification({ userDbId, token }) {
     };
 
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
+    let pollFailures = 0;
+    const interval = setInterval(async () => {
+      if (pollFailures >= 5) {
+        console.warn("Stopping notification polling after repeated failures");
+        clearInterval(interval);
+        return;
+      }
+      try {
+        await fetchNotifications();
+        pollFailures = 0;
+      } catch {
+        pollFailures++;
+      }
+    }, 30000);
     return () => clearInterval(interval);
   }, [userDbId, token, filter]);
 
   const markAsRead = async (notificationId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/notifications/${Number(notificationId)}/read`,
+        `${API_BASE_URL}/notifications/${Number(notificationId)}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -107,7 +121,7 @@ export default function EmployeeNotification({ userDbId, token }) {
       await Promise.all(
         Array.from(selectedNotifications).map((id) =>
           axios.put(
-            `http://localhost:8080/notifications/${Number(id)}/read`,
+            `${API_BASE_URL}/notifications/${Number(id)}/read`,
             {},
             { headers: { Authorization: `Bearer ${token}` } }
           )

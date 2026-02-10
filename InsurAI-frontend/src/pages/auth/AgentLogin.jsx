@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import AuthLayout from "./components/AuthLayout";
 import agentAuthImage from "../../assets/agent-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
+import { API_BASE_URL } from "../../config";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AgentLogin() {
@@ -20,7 +21,7 @@ export default function AgentLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8080/agent/login", {
+      const response = await fetch(`${API_BASE_URL}/agent/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

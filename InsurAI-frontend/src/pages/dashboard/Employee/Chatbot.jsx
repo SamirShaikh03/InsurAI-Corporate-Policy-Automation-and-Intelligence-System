@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../../config';
 import './Chatbot.css';
 
 const Chatbot = ({ employeeData = { name: 'Employee', claims: [], policies: [] } }) => {
@@ -64,7 +65,7 @@ const Chatbot = ({ employeeData = { name: 'Employee', claims: [], policies: [] }
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/employee/chatbot',
+        `${API_BASE_URL}/employee/chatbot`,
         { message: userMessage.text },
         { headers: { Authorization: `Bearer ${token}` } }
       );

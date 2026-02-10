@@ -5,6 +5,7 @@ import axios from "axios";
 import AuthLayout from "./components/AuthLayout";
 import agentAuthImage from "../../assets/agent-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
+import { API_BASE_URL } from "../../config";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AgentRegister({ onBack }) {
@@ -61,7 +62,7 @@ export default function AgentRegister({ onBack }) {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/admin/agent/register",
+        `${API_BASE_URL}/admin/agent/register`,
         newAgent,
         {
           headers: {

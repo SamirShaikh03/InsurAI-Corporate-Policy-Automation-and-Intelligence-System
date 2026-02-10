@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./EmployeeClaims.css";
+import { API_BASE_URL } from "../../../config";
 import { SkeletonStats, SkeletonTable, SectionLoader, InlineSpinner } from "../../../components/loading";
 
 export default function EmployeeClaims({
@@ -45,7 +46,7 @@ const fetchClaims = async () => {
 
   setLoading(true);
   try {
-    const res = await fetch("http://localhost:8080/employee/claims", {
+    const res = await fetch(`${API_BASE_URL}/employee/claims`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) throw new Error("Failed to fetch claims");
@@ -228,9 +229,9 @@ const fetchClaims = async () => {
 
       newClaim.documents.forEach(file => formData.append("documents", file));
 
-      let url = "http://localhost:8080/employee/claims";
+      let url = `${API_BASE_URL}/employee/claims`;
       if (newClaim.id) {
-        url = "http://localhost:8080/employee/claims/update";
+        url = `${API_BASE_URL}/employee/claims/update`;
         formData.append("claimId", newClaim.id);
       }
 
@@ -596,7 +597,7 @@ const fetchClaims = async () => {
                             <span>{doc.split('/').pop()}</span>
                           </div>
                           <a
-                            href={`http://localhost:8080${doc}`}
+                            href={`${API_BASE_URL}${doc}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="claims-link"
@@ -821,7 +822,7 @@ const fetchClaims = async () => {
                         </div>
                         <div className="claims-upload__actions">
                           <a
-                            href={`http://localhost:8080${doc}`}
+                            href={`${API_BASE_URL}${doc}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="claims-icon-btn"

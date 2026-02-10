@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 import EmployeeClaims from './EmployeeClaims';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -107,7 +108,7 @@ export default function EmployeeDashboard() {
       if (!token || !empId) return;
 
       const response = await axios.get(
-        `http://localhost:8080/notifications/user/${empId}`,
+        `${API_BASE_URL}/notifications/user/${empId}`,
         {
           params: { role: "Employee" },
           headers: { Authorization: `Bearer ${token}` },
@@ -128,7 +129,7 @@ export default function EmployeeDashboard() {
       if (!token) return;
 
       await axios.put(
-        `http://localhost:8080/notifications/${id}/read`,
+        `${API_BASE_URL}/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -171,7 +172,21 @@ export default function EmployeeDashboard() {
     fetchEmployeeClaims(token);
     fetchBackendNotifications();
 
-    const interval = setInterval(() => fetchEmployeeQueries(token), 15000);
+    let pollFailures = 0;
+    const maxPollFailures = 5;
+    const interval = setInterval(async () => {
+      if (pollFailures >= maxPollFailures) {
+        console.warn("Stopping query polling after repeated failures");
+        clearInterval(interval);
+        return;
+      }
+      try {
+        await fetchEmployeeQueries(token);
+        pollFailures = 0; // reset on success
+      } catch {
+        pollFailures++;
+      }
+    }, 30000);
     return () => clearInterval(interval);
   }, [navigate, fetchBackendNotifications]);
 
@@ -181,7 +196,7 @@ export default function EmployeeDashboard() {
       const token = localStorage.getItem("token");
       if (!token) return 0;
 
-      const response = await axios.get("http://localhost:8080/employee/renewals/my-policies", {
+      const response = await axios.get(`${API_BASE_URL}/employee/renewals/my-policies`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -295,7 +310,7 @@ export default function EmployeeDashboard() {
   // ------------------ KEEPING ORIGINAL EMPLOYEE FETCH ------------------
   const fetchLoggedInEmployee = async (token) => {
     try {
-      const response = await axios.get("http://localhost:8080/auth/employees", {
+      const response = await axios.get(`${API_BASE_URL}/auth/employees`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -323,7 +338,7 @@ export default function EmployeeDashboard() {
   const fetchEmployeeData = async (token) => {
     setLoading(prev => ({ ...prev, policies: true }));
     try {
-      const response = await axios.get("http://localhost:8080/employee/policies", {
+      const response = await axios.get(`${API_BASE_URL}/employee/policies`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -358,7 +373,7 @@ export default function EmployeeDashboard() {
   const fetchEmployeeClaims = async (token) => {
     setLoading(prev => ({ ...prev, claims: true }));
     try {
-      const response = await axios.get("http://localhost:8080/employee/claims", {
+      const response = await axios.get(`${API_BASE_URL}/employee/claims`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setClaims(response.data);
@@ -372,7 +387,7 @@ export default function EmployeeDashboard() {
   // ------------------ KEEPING ORIGINAL AGENTS FETCH ------------------
   const fetchAgents = async (token) => {
     try {
-      const response = await axios.get("http://localhost:8080/agent/availability/all", {
+      const response = await axios.get(`${API_BASE_URL}/agent/availability/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAgentsAvailability(response.data);
@@ -385,7 +400,7 @@ export default function EmployeeDashboard() {
   const fetchEmployeeQueries = async (token) => {
     setLoading(prev => ({ ...prev, queries: true }));
     try {
-      const response = await axios.get("http://localhost:8080/employee/queries", {
+      const response = await axios.get(`${API_BASE_URL}/employee/queries`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setQueries(response.data);
@@ -520,7 +535,7 @@ export default function EmployeeDashboard() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/employee/queries?agentId=${selectedAgentId}&queryText=${encodeURIComponent(newQuery.queryText)}&policyName=${encodeURIComponent(policyName)}&claimType=${encodeURIComponent(newQuery.claimType)}`,
+        `${API_BASE_URL}/employee/queries?agentId=${selectedAgentId}&queryText=${encodeURIComponent(newQuery.queryText)}&policyName=${encodeURIComponent(policyName)}&claimType=${encodeURIComponent(newQuery.claimType)}`,
         null,
         {
           headers: {

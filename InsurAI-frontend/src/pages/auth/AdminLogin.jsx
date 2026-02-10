@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import AuthLayout from "./components/AuthLayout";
 import empAuthImage from "../../assets/admin-auth-image.png";
 import { InlineSpinner } from "../../components/loading";
+import { API_BASE_URL } from "../../config";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AdminLogin() {
@@ -20,7 +21,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8080/admin/login", {
+      const res = await fetch(`${API_BASE_URL}/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
