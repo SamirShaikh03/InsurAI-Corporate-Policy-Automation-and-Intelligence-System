@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
@@ -15,22 +16,25 @@ public class SecurityConfig {
     private final AgentJwtAuthenticationFilter agentJwtAuthenticationFilter;
     private final HrJwtAuthenticationFilter hrJwtAuthenticationFilter;
     private final AdminJwtAuthenticationFilter adminJwtAuthenticationFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     public SecurityConfig(EmployeeJwtAuthenticationFilter employeeJwtAuthenticationFilter,
                           AgentJwtAuthenticationFilter agentJwtAuthenticationFilter,
                           HrJwtAuthenticationFilter hrJwtAuthenticationFilter,
-                          AdminJwtAuthenticationFilter adminJwtAuthenticationFilter) {
+                          AdminJwtAuthenticationFilter adminJwtAuthenticationFilter,
+                          CorsConfigurationSource corsConfigurationSource) {
         this.employeeJwtAuthenticationFilter = employeeJwtAuthenticationFilter;
         this.agentJwtAuthenticationFilter = agentJwtAuthenticationFilter;
         this.hrJwtAuthenticationFilter = hrJwtAuthenticationFilter;
         this.adminJwtAuthenticationFilter = adminJwtAuthenticationFilter;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> {}) // Keep global CORS
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .authorizeHttpRequests(auth -> auth
                 // Employee claim endpoints
                 .requestMatchers("/employee/claims/**").hasRole("EMPLOYEE")
