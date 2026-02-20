@@ -33,7 +33,7 @@ export default function HrLogin() {
       if (!res.ok) {
         const text = await res.text();
         if (res.status === 404) {
-          setError("HR account not found. Please check your email or register.");
+          setError("HR account not found. Please check your email or contact admin.");
         } else if (res.status === 401) {
           setError("Invalid password. Please try again.");
         } else {
@@ -59,9 +59,6 @@ export default function HrLogin() {
     <AuthLayout
       title="HR Sign In"
       subtitle="Access the human resources management portal"
-      switchText="Don't have an account?"
-      switchLink="/hr/register"
-      switchLabel="Sign up"
       image={empAuthImage}
     >
       {error && (

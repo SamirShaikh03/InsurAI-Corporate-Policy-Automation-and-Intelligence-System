@@ -58,9 +58,6 @@ export default function AgentLogin() {
     <AuthLayout
       title="Agent Sign In"
       subtitle="Access your client management dashboard"
-      switchText="Don't have an account?"
-      switchLink="/agent/register"
-      switchLabel="Sign up"
       image={agentAuthImage}
     >
       {error && (
