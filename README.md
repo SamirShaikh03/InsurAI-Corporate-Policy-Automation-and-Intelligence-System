@@ -15,13 +15,19 @@
 - [User Roles & Permissions](#user-roles--permissions)
 - [Security](#security)
 - [How It Works](#how-it-works)
+- [License](#license)
+- [Project Status](#project-status)
 - [Contributing](#contributing)
+
+<a id="overview"></a>
 
 ## 📋 Overview
 
 **InsurAI** is an enterprise-grade Corporate Policy Automation and Intelligence System designed to streamline insurance policy management, claims processing, and employee benefits administration within corporate environments.
 
 ---
+
+<a id="features"></a>
 
 ## ✨ Features
 
@@ -41,6 +47,7 @@
 
 ---
 
+<a id="technology-stack"></a>
 
 ## 🛠 Technology Stack
 
@@ -65,6 +72,8 @@
 - **Lombok:** For reducing boilerplate code
 
 ---
+
+<a id="architecture"></a>
 
 ## 🏗 Architecture
 
@@ -97,6 +106,8 @@ The application follows a **layered architecture** pattern:
 ```
 
 ---
+
+<a id="project-structure"></a>
 
 ## 📁 Project Structure
 
@@ -168,6 +179,8 @@ insurai-backend/
 ```
 ---
 
+<a id="database-configuration"></a>
+
 ## 🗄 Database Configuration
 
 ### Database Schema
@@ -190,6 +203,8 @@ The application uses **JPA/Hibernate** with `ddl-auto=update`, which automatical
 | `agent_availability` | Agent availability schedules |
 
 ---
+
+<a id="user-roles--permissions"></a>
 
 ## 👥 User Roles & Permissions
 
@@ -222,6 +237,8 @@ The application uses **JPA/Hibernate** with `ddl-auto=update`, which automatical
 
 ---
 
+<a id="security"></a>
+
 ## 🔐 Security
 
 ### Authentication Flow
@@ -241,6 +258,8 @@ The application uses **JPA/Hibernate** with `ddl-auto=update`, which automatical
 - **CSRF Protection:** Disabled for REST API (JWT provides protection)
 
 ---
+
+<a id="how-it-works"></a>
 
 ## ⚙️ How It Works
 
@@ -297,16 +316,33 @@ Claim Submitted → Fraud Service Analyzes:
 
 ---
 
+<a id="license"></a>
+
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
+<a id="project-status"></a>
+
 ## 🚧 Project Status
+
 This project is under active development. Functionality may change, and bugs may be present. Ongoing updates will include fixes and feature enhancements.
 
 ---
 
+<a id="contributing"></a>
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add your feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+---
+
 **Version**: 2.0.0  
-**Last Updated**: January 22, 2026
+**Last Updated**: February 20, 2026
