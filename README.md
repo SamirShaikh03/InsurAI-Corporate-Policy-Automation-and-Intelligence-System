@@ -12,6 +12,7 @@ A full-stack corporate insurance management platform featuring role-based access
 
 ## Table of Contents
 
+- [Screenshots](#screenshots)
 - [Key Features](#key-features)
 - [Tech Stack](#tech-stack)
 - [System Architecture](#system-architecture)
@@ -20,6 +21,35 @@ A full-stack corporate insurance management platform featuring role-based access
 - [Database Schema](#database-schema)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Screenshots
+
+### Landing Page
+![InsurAI Landing Page](InsurAI-frontend/src/assets/homepage.png)
+
+*Corporate Insurance Automation homepage with an overview of capabilities.*
+
+### Admin Dashboard – User Management
+![Admin Dashboard](InsurAI-frontend/src/assets/admin-dashboard.png)
+
+*Full system access: manage Employees, Agents, and HR users with role distribution charts.*
+
+### HR Portal Dashboard
+![HR Dashboard](InsurAI-frontend/src/assets/hr-dashboard.png)
+
+*Claims management, fraud monitoring, policy tracking, and quick-action shortcuts.*
+
+### Agent Dashboard
+![Agent Dashboard](InsurAI-frontend/src/assets/agent-dashboard.png)
+
+*Real-time query queue, assisted claims tracking, and availability controls.*
+
+### Employee Portal Dashboard
+![Employee Dashboard](InsurAI-frontend/src/assets/emp-dashboard.png)
+
+*Personal overview of active policies, pending claims, queries, and financial summary.*
+
+---
 
 ## Key Features
 
