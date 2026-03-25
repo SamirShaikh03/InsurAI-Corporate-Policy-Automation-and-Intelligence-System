@@ -49,6 +49,7 @@ export default function EmployeeDashboard() {
   const [newQuery, setNewQuery] = useState({ queryText: "" });
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationType, setNotificationType] = useState("success"); // success | error | warning | info
   const [backendNotifications, setBackendNotifications] = useState([]);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [selectedPolicyId, setSelectedPolicyId] = useState("");
@@ -99,6 +100,27 @@ export default function EmployeeDashboard() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const closeMenuOnDesktop = () => {
+      if (window.innerWidth > 1024) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", closeMenuOnDesktop);
+    return () => window.removeEventListener("resize", closeMenuOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (window.innerWidth <= 1024) {
+      document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   // Fetch backend notifications
   const fetchBackendNotifications = useCallback(async () => {
@@ -277,16 +299,33 @@ export default function EmployeeDashboard() {
 };
 
   // Enhanced notification system that closes when tab changes
-  const showNotificationAlert = useCallback((msg) => {
+  const showNotificationAlert = useCallback((msg, type = "success") => {
     setNotificationMessage(msg);
+    setNotificationType(type);
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 4000);
+  }, []);
+
+  // Called by EmployeeClaims after a successful submit so the home-dashboard stats
+  // (derived from this component's own `claims` state) stay up-to-date.
+  const onClaimSubmitted = useCallback(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    // Re-fetch the dashboard claims state silently in the background
+    setLoading(prev => ({ ...prev, claims: true }));
+    axios.get(`${API_BASE_URL}/employee/claims`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => { setClaims(res.data); })
+      .catch(err => console.error("Error refreshing dashboard claims:", err))
+      .finally(() => setLoading(prev => ({ ...prev, claims: false })));
   }, []);
 
   // Enhanced tab change handler that closes notifications
   const handleTabChange = useCallback((tab) => {
     setShowNotification(false); // Close notification when tab changes
     setActiveTab(tab);
+    setIsMobileMenuOpen(false);
   }, []);
 
   // ------------------ KEEPING ORIGINAL URL FORMATTING ------------------
@@ -900,9 +939,14 @@ export default function EmployeeDashboard() {
     <div className="emp-dashboard">
       {/* Notification Alert */}
       {showNotification && (
-        <div className="emp-notification-toast">
+        <div className={`emp-notification-toast emp-notification-toast--${notificationType}`}>
           <div className="emp-notification-toast__content">
-            <i className="bi bi-check-circle"></i>
+            <i className={`bi ${
+              notificationType === "error" ? "bi-exclamation-circle" :
+              notificationType === "warning" ? "bi-exclamation-triangle" :
+              notificationType === "info" ? "bi-info-circle" :
+              "bi-check-circle"
+            }`}></i>
             <span>{notificationMessage}</span>
             <button type="button" className="emp-notification-toast__close" onClick={() => setShowNotification(false)}>
               <i className="bi bi-x-lg"></i>
@@ -975,6 +1019,7 @@ export default function EmployeeDashboard() {
                 token={localStorage.getItem("token")}
                 selectedPolicyId={selectedPolicyId}
                 setSelectedPolicyId={setSelectedPolicyId}
+                onClaimSubmitted={onClaimSubmitted}
               />
             )}
             {activeTab === "reimbursements" && (

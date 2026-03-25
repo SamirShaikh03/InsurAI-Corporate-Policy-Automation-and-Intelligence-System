@@ -1,0 +1,109 @@
+.homepage-navbar-inner {
+  position: relative;
+}
+
+.homepage-navbar-logo {
+  object-fit: contain;
+}
+
+.homepage-navbar-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  align-items: center;
+  justify-content: center;
+}
+
+.homepage-hamburger-icon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.homepage-hamburger-icon span {
+  width: 18px;
+  height: 2px;
+  border-radius: 99px;
+  background: #1f4b99;
+}
+
+@media (max-width: 991.98px) {
+  .homepage-navbar-toggle {
+    display: inline-flex;
+  }
+
+  .homepage-nav-shell {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+    padding: 0.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1030;
+  }
+
+  .homepage-nav-shell.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .homepage-nav-shell .navbar-nav {
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+
+  .homepage-nav-shell .nav-item {
+    width: 100%;
+  }
+
+  .homepage-nav-shell .nav-link,
+  .homepage-nav-shell .btn {
+    width: 100%;
+    text-align: left;
+    border-radius: 10px;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .homepage-hero {
+    transform: none !important;
+    min-height: auto !important;
+    padding-top: 96px !important;
+    padding-bottom: 120px !important;
+  }
+
+  .homepage-hero-title {
+    font-size: 2.2rem !important;
+    line-height: 1.15 !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .homepage-navbar-logo {
+    height: 34px !important;
+  }
+
+  .homepage-hero {
+    padding-top: 78px !important;
+    padding-bottom: 84px !important;
+  }
+
+  .homepage-hero-title {
+    font-size: 1.8rem !important;
+  }
+
+  .homepage-hero-subtitle {
+    font-size: 1rem !important;
+  }
+}

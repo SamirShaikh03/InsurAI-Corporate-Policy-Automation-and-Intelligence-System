@@ -135,6 +135,27 @@ export default function AgentDashboard() {
     fetchBackendNotifications();
   }, [navigate, fetchBackendNotifications]);
 
+  useEffect(() => {
+    const closeMenuOnDesktop = () => {
+      if (window.innerWidth > 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", closeMenuOnDesktop);
+    return () => window.removeEventListener("resize", closeMenuOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/agent/login");
@@ -606,7 +627,11 @@ export default function AgentDashboard() {
           <div className="row align-items-center">
             <div className="col-md-6 d-flex align-items-center">
               <button 
-                className="btn btn-light btn-sm me-3 d-md-none"
+                type="button"
+                className="agent-header-toggle me-3 d-md-none"
+                aria-label="Toggle navigation"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="agent-sidebar"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 <i className="bi bi-list"></i>
@@ -630,22 +655,13 @@ export default function AgentDashboard() {
                 {/* Notification Bell */}
                 <button 
                   type="button" 
-                  className="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
+                  className="btn btn-outline-light btn-sm d-flex align-items-center gap-2 agent-header-notification"
                   onClick={() => setShowNotificationPopup(!showNotificationPopup)}
-                  style={{ position: 'relative' }}
+                  aria-label="Notifications"
                 >
                   <i className="bi bi-bell"></i>
                   {backendNotifications.filter(n => !n.readStatus).length > 0 && (
-                    <span style={{
-                      position: 'absolute',
-                      top: '-4px',
-                      right: '-4px',
-                      width: '8px',
-                      height: '8px',
-                      background: '#ef4444',
-                      borderRadius: '50%',
-                      border: '2px solid currentColor'
-                    }} />
+                    <span className="agent-header-notification-dot" />
                   )}
                 </button>
 
@@ -701,9 +717,11 @@ export default function AgentDashboard() {
         
         {/* Sidebar */}
         <aside 
+          id="agent-sidebar"
           className={`dashboard-sidebar ${isMobileMenuOpen ? 'show' : ''} ${isSidebarHovered || isMobileMenuOpen ? 'is-expanded' : ''}`}
           onMouseEnter={() => setIsSidebarHovered(true)}
           onMouseLeave={() => setIsSidebarHovered(false)}
+          aria-label="Primary navigation"
         >
 
           <nav className="nav flex-column">

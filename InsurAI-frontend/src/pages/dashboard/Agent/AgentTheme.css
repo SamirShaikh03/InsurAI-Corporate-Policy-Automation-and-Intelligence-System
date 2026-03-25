@@ -213,6 +213,37 @@
   padding: 0.5rem 0.75rem;
 }
 
+.agent-dashboard .agent-header-toggle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-radius: var(--agent-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-dashboard .agent-header-toggle:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.agent-dashboard .agent-header-notification-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--agent-danger);
+  border: 2px solid currentColor;
+}
+
+.agent-dashboard .agent-header-notification {
+  position: relative;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    SIDEBAR – Collapsible with Hover Expand
    ═══════════════════════════════════════════════════════════════════════════ */

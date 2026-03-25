@@ -8,7 +8,8 @@ export default function EmployeeClaims({
   activeTab,
   setActiveTab,
   showNotificationAlert,
-  policies = []
+  policies = [],
+  onClaimSubmitted = null   // called after a successful submit so the parent can refresh its own claims state
 }) {
   const [newClaim, setNewClaim] = useState({
     type: "",
@@ -23,7 +24,8 @@ export default function EmployeeClaims({
     policies.length > 0 ? String(policies[0].id) : ""
   );
   const [viewingClaim, setViewingClaim] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);     // controls the list skeleton
+  const [submitting, setSubmitting] = useState(false); // controls the submit-button spinner
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -49,14 +51,29 @@ const fetchClaims = async () => {
     const res = await fetch(`${API_BASE_URL}/employee/claims`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (!res.ok) throw new Error("Failed to fetch claims");
+
+    // Auth errors: let the existing session/token handling deal with it silently
+    if (res.status === 401 || res.status === 403) {
+      console.warn("Auth error fetching claims:", res.status);
+      setClaims([]);
+      return;
+    }
+
+    if (!res.ok) throw new Error(`Failed to fetch claims (${res.status})`);
+
     const data = await res.json();
+
+    if (!Array.isArray(data)) {
+      console.warn("Unexpected claims response format");
+      setClaims([]);
+      return;
+    }
 
     const mapped = data.map(claim => ({
       ...claim,
-  policyId: Number(claim.policy_id || claim.policyId || 0), // ✅ handles both cases
+      policyId: Number(claim.policy_id || claim.policyId || 0),
       remarks: claim.remarks || "No remarks yet",
-      formattedAmount: `₹${claim.amount?.toLocaleString('en-IN') || '0'}`,
+      formattedAmount: `₹${Number(claim.amount || 0).toLocaleString('en-IN')}`,
       statusColor: getStatusColor(claim.status),
       statusIcon: getStatusIcon(claim.status),
       typeIcon: getTypeIcon(claim.title)
@@ -64,11 +81,9 @@ const fetchClaims = async () => {
 
     setClaims(mapped);
 
- 
-
   } catch (error) {
-    console.error(error);
-    showNotificationAlert("Error fetching claims", "error");
+    console.error("Error fetching claims:", error);
+    showNotificationAlert("Unable to load claims. Please try again.", "error");
   } finally {
     setLoading(false);
   }
@@ -218,7 +233,7 @@ const fetchClaims = async () => {
       return showNotificationAlert("Please fill all required fields.", "warning");
     }
 
-    setLoading(true);
+    setSubmitting(true);  // only the button spinner — does NOT conflict with list skeleton
     try {
       const formData = new FormData();
       formData.append("policyId", selectedPolicyId);
@@ -246,33 +261,32 @@ const fetchClaims = async () => {
         throw new Error(errorText || "Failed to submit claim");
       }
 
-      const data = await res.json();
-
-      setClaims(prev => {
-        if (newClaim.id) {
-          return prev.map(c => (c.id === data.id ? data : c));
-        } else {
-          return [data, ...prev];
-        }
-      });
-
-      showNotificationAlert(
-        newClaim.id ? "Claim updated successfully!" : "Claim submitted successfully!", 
-        "success"
-      );
+      await res.json(); // consume the response body
 
       // Reset form
       setNewClaim({ type: "", amount: "", date: "", description: "", documents: [], existingDocuments: [] });
       if (policies.length > 0) setSelectedPolicyId(String(policies[0].id));
 
+      // Refresh the claims list FIRST (awaited) — users will see the skeleton briefly
+      // then the Updated list, rather than a "No claims found" flash.
       await fetchClaims();
+
+      // Notify dashboard so its home-stats also update
+      if (typeof onClaimSubmitted === "function") onClaimSubmitted();
+
+      // Switch to claims view only after data is ready
       setActiveTab("claims");
+
+      showNotificationAlert(
+        newClaim.id ? "Claim updated successfully!" : "Claim submitted successfully!",
+        "success"
+      );
 
     } catch (error) {
       console.error(error);
       showNotificationAlert(error.message || "Error submitting claim", "error");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -476,8 +490,10 @@ const fetchClaims = async () => {
                         </span>
                       </td>
                       <td>
-                        <span className="claims-remarks" title={claim.remarks}>
-                          {claim.remarks.length > 40 ? `${claim.remarks.substring(0, 40)}...` : claim.remarks}
+                        <span className="claims-remarks" title={claim.remarks || ''}>
+                          {(claim.remarks || '').length > 40
+                            ? `${(claim.remarks || '').substring(0, 40)}...`
+                            : (claim.remarks || 'No remarks yet')}
                         </span>
                       </td>
                       <td>
@@ -644,7 +660,7 @@ const fetchClaims = async () => {
       }
     }
 
-    const isSubmitDisabled = newClaim.amount > remainingCoverage || loading;
+    const isSubmitDisabled = newClaim.amount > remainingCoverage || submitting;
 
     return (
       <>
@@ -886,7 +902,7 @@ const fetchClaims = async () => {
                 Cancel
               </button>
               <button type="submit" className="claims-btn claims-btn--success" disabled={isSubmitDisabled}>
-                {loading ? (
+                {submitting ? (
                   <>
                     <span className="claims-spinner claims-spinner--inline" aria-hidden="true"></span>
                     {isEditMode ? "Updating..." : "Submitting..."}

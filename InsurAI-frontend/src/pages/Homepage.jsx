@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import logoImage from "../assets/logo-img.png";
+import "./Homepage.css";
 
 /**
  * UI color palette used across the application.
@@ -154,6 +155,27 @@ const whyPoints = [
 
 const Homepage = () => {
   const navigate = useNavigate();
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setIsMobileNavOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (window.innerWidth < 992) {
+      document.body.style.overflow = isMobileNavOpen ? "hidden" : "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileNavOpen]);
 
   const scrollToSection = (id) => {
     const target = document.getElementById(id);
@@ -165,19 +187,21 @@ const Homepage = () => {
   const handleNavClick = (event, id) => {
     event.preventDefault();
     scrollToSection(id);
+    setIsMobileNavOpen(false);
   };
 
   const handleNavigate = (path) => {
     navigate(path);
+    setIsMobileNavOpen(false);
   };
 
   return (
     <div style={{ background: palette.background, color: palette.text }}>
       <nav
-        className="navbar navbar-expand-lg navbar-light shadow-sm sticky-top"
+        className="navbar navbar-expand-lg navbar-light shadow-sm sticky-top homepage-navbar"
         style={{ position: "sticky", top: 0, zIndex: 1020, background: palette.surface, borderBottom: `1px solid ${palette.border}` }}
       >
-        <div className="container py-2">
+        <div className="container py-2 homepage-navbar-inner">
           <button
             className="navbar-brand btn btn-link p-0"
             onClick={() => scrollToSection("about")}
@@ -194,6 +218,7 @@ const Homepage = () => {
             <img
               src={logoImage}
               alt="InsurAI"
+              className="homepage-navbar-logo"
               style={{
                 height: "40px",
                 width: "auto",
@@ -201,18 +226,21 @@ const Homepage = () => {
             />
           </button>
           <button
-            className="navbar-toggler"
+            className="homepage-navbar-toggle"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#mainNav"
             aria-controls="mainNav"
-            aria-expanded="false"
+            aria-expanded={isMobileNavOpen}
             aria-label="Toggle navigation"
+            onClick={() => setIsMobileNavOpen((prev) => !prev)}
           >
-            <span className="navbar-toggler-icon" />
+            <span className="homepage-hamburger-icon" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </button>
 
-          <div className="collapse navbar-collapse" id="mainNav">
+          <div className={`navbar-collapse homepage-nav-shell ${isMobileNavOpen ? "is-open" : ""}`} id="mainNav">
             <ul className="navbar-nav ms-auto align-items-lg-center gap-2">
               {["about", "overview", "capabilities", "process", "security", "why"].map(
                 (section) => (
@@ -232,7 +260,10 @@ const Homepage = () => {
                 <button
                   className="btn btn-sm text-white"
                   style={{ background: palette.primary, border: "none" }}
-                  onClick={() => scrollToSection("roles")}
+                  onClick={() => {
+                    scrollToSection("roles");
+                    setIsMobileNavOpen(false);
+                  }}
                 >
                   Login
                 </button>
@@ -243,6 +274,7 @@ const Homepage = () => {
       </nav>
 
       <header
+        className="homepage-hero"
         style={{
           ...narrowSpacing,
           paddingTop: "118px",
@@ -263,13 +295,13 @@ const Homepage = () => {
                 Corporate Insurance Automation
               </p>
               <h1
-                className="fw-semibold"
+                className="fw-semibold homepage-hero-title"
                 style={{ color: palette.primary, lineHeight: 1.08, fontSize: "3.15rem", maxWidth: "760px" }}
               >
                 A focused workspace for policies, claims, and support.
               </h1>
               <p
-                className="mt-3 mb-5"
+                className="mt-3 mb-5 homepage-hero-subtitle"
                 style={{ color: palette.muted, lineHeight: 1.7, fontSize: "1.08rem", maxWidth: "680px" }}
               >
                 Purpose-built for benefits teams: predictable journeys for Admins, HR, Agents, and Employees with

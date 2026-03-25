@@ -165,6 +165,27 @@ export default function AdminDashboard() {
     fetchBackendNotifications();
   }, [fetchUsers, fetchBackendNotifications]);
 
+  useEffect(() => {
+    const closeMenuOnDesktop = () => {
+      if (window.innerWidth > 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", closeMenuOnDesktop);
+    return () => window.removeEventListener("resize", closeMenuOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   // ---------------- Register HR ----------------
   const handleRegisterHR = async (hrData) => {
     try {
@@ -895,7 +916,11 @@ export default function AdminDashboard() {
         <div className="admin-header-inner">
           <div className="admin-header-left">
             <button 
+              type="button"
               className="admin-header-toggle"
+              aria-label="Toggle navigation"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="admin-sidebar"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <i className="bi bi-list"></i>
@@ -913,37 +938,14 @@ export default function AdminDashboard() {
           <div className="admin-header-right">
             <button 
               type="button" 
-              className="admin-header-icon" 
+              className="admin-header-icon admin-header-notification"
               aria-label="Notifications"
               title="Notifications"
               onClick={() => setShowNotificationPopup(!showNotificationPopup)}
-              style={{ 
-                background: 'transparent',
-                border: 'none',
-                color: '#ffffff',
-                fontSize: '20px',
-                cursor: 'pointer',
-                padding: '8px 12px',
-                borderRadius: '8px',
-                transition: 'all 0.2s ease',
-                position: 'relative',
-                marginRight: '16px'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
             >
               <i className="bi bi-bell"></i>
               {backendNotifications.filter(n => !n.readStatus).length > 0 && (
-                <span style={{
-                  position: 'absolute',
-                  top: '6px',
-                  right: '8px',
-                  width: '8px',
-                  height: '8px',
-                  background: '#ef4444',
-                  borderRadius: '50%',
-                  border: '2px solid #1e3a8a'
-                }} />
+                <span className="admin-header-notification-dot" />
               )}
             </button>
 
@@ -984,9 +986,11 @@ export default function AdminDashboard() {
 
         {/* Sidebar */}
         <aside 
+          id="admin-sidebar"
           className={`admin-sidebar ${isSidebarHovered ? 'is-expanded' : ''} ${isMobileMenuOpen ? 'is-expanded' : ''}`}
           onMouseEnter={() => setIsSidebarHovered(true)}
           onMouseLeave={() => setIsSidebarHovered(false)}
+          aria-label="Primary navigation"
         >
           <div className="admin-sidebar-inner">
 

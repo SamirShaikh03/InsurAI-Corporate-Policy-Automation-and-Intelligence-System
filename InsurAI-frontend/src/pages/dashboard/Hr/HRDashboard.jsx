@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../../config";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -78,7 +78,11 @@ export default function HRDashboard() {
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const loggedInHrId = parseInt(localStorage.getItem("id"));
+  // Stabilise the HR id so useCallback deps never see NaN !== NaN churn.
+  // parseInt(null) = NaN, and NaN !== NaN causes infinite useEffect re-runs.
+  const _rawHrId = parseInt(localStorage.getItem("id"), 10);
+  const loggedInHrIdRef = useRef(Number.isFinite(_rawHrId) ? _rawHrId : 0);
+  const loggedInHrId = loggedInHrIdRef.current;
   
   // Get HR name from localStorage
   const hrName = localStorage.getItem('hrName') || localStorage.getItem('name') || 'HR Administrator';
@@ -219,7 +223,7 @@ export default function HRDashboard() {
       setLoading(prev => ({ ...prev, claims: true }));
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/hr/login");
+        // No token — PrivateRoute will redirect; do nothing here
         return;
       }
 
@@ -230,10 +234,13 @@ export default function HRDashboard() {
       if (response.ok) {
         const data = await response.json();
         setPendingClaims(data);
-        processEnhancedDashboardStats(data);
+        // processEnhancedDashboardStats is called automatically by the
+        // dedicated useEffect that watches pendingClaims + employees + policies
         addNotification('success', `Loaded ${data.length} claims successfully`);
-      } else if (response.status === 403) {
-        navigate("/hr/login");
+      } else if (response.status === 401 || response.status === 403) {
+        // Auth error — PrivateRoute handles actual session expiry; don't redirect from here.
+        console.warn("HR fetchClaims: auth error", response.status);
+        addNotification('error', 'Session may have expired. Please re-login if issues persist.');
       } else {
         throw new Error('Failed to fetch claims');
       }
@@ -243,7 +250,7 @@ export default function HRDashboard() {
     } finally {
       setLoading(prev => ({ ...prev, claims: false }));
     }
-  }, [loggedInHrId, navigate]);
+  }, [loggedInHrId]);
 
   // memoize employees/policies to break circular deps
   const memoizedEmployees = useMemo(() => employees, [employees.length]);

@@ -1712,6 +1712,23 @@
   color: #ffffff;
 }
 
+/* Notification toast type variants */
+.emp-notification-toast--success .emp-notification-toast__content {
+  background: var(--emp-success, #22c55e);
+}
+
+.emp-notification-toast--error .emp-notification-toast__content {
+  background: #ef4444;
+}
+
+.emp-notification-toast--warning .emp-notification-toast__content {
+  background: #f59e0b;
+}
+
+.emp-notification-toast--info .emp-notification-toast__content {
+  background: #3b82f6;
+}
+
 /* Responsive Dashboard Home */
 @media (max-width: 1200px) {
   .emp-dashboard-grid {

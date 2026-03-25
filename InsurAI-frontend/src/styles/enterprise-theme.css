@@ -522,28 +522,58 @@
 @media (max-width: 1024px) {
   .auth-page {
     grid-template-columns: 1fr;
+    min-height: 100dvh;
   }
 
   .auth-page__visual {
-    display: none;
+    display: block;
+    height: clamp(200px, 35vh, 320px);
+    overflow: hidden;
+    order: -1;
+    border-bottom: 1px solid var(--border);
   }
 
   .auth-page__form {
-    min-height: 100vh;
+    min-height: auto;
+    margin-left: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 1.25rem;
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+  }
+
+  .auth-page__image {
+    width: 100%;
+    height: 100%;
+    margin-right: 0;
+    object-position: center 28%;
+  }
+
+  .auth-page__brand {
+    margin-left: 0;
+    align-self: center;
+    margin-bottom: 1rem;
   }
 }
 
 @media (max-width: 640px) {
   .auth-page__form {
-    padding: 1.5rem;
+    padding: 1rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .auth-page__form-inner {
     max-width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
   }
 
   .auth-page__title {
     font-size: 1.5rem;
+  }
+
+  .auth-page__subtitle {
+    font-size: 0.9rem;
   }
 
   .auth-form-row {
@@ -1190,28 +1220,58 @@
 @media (max-width: 1024px) {
   .auth-page {
     grid-template-columns: 1fr;
+    min-height: 100dvh;
   }
 
   .auth-page__visual {
-    display: none;
+    display: block;
+    height: clamp(200px, 35vh, 320px);
+    overflow: hidden;
+    order: -1;
+    border-bottom: 1px solid var(--border);
   }
 
   .auth-page__form {
-    min-height: 100vh;
+    min-height: auto;
+    margin-left: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 1.25rem;
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+  }
+
+  .auth-page__image {
+    width: 100%;
+    height: 100%;
+    margin-right: 0;
+    object-position: center 28%;
+  }
+
+  .auth-page__brand {
+    margin-left: 0;
+    align-self: center;
+    margin-bottom: 1rem;
   }
 }
 
 @media (max-width: 640px) {
   .auth-page__form {
-    padding: 1.5rem;
+    padding: 1rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .auth-page__form-inner {
     max-width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
   }
 
   .auth-page__title {
     font-size: 1.5rem;
+  }
+
+  .auth-page__subtitle {
+    font-size: 0.9rem;
   }
 
   .auth-form-row {

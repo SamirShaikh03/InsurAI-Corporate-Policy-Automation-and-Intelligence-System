@@ -43,20 +43,39 @@ function AppInitializer({ children }) {
   const [loadingMessage, setLoadingMessage] = useState("Initializing...");
 
   useEffect(() => {
-    // Simulate app initialization (checking auth, loading config, etc.)
+    let isMounted = true;
+
+    // Failsafe for mobile browsers: never block UI indefinitely during boot.
+    const failSafeTimer = setTimeout(() => {
+      if (isMounted) {
+        setIsAppReady(true);
+      }
+    }, 2500);
+
     const initApp = async () => {
-      setLoadingMessage("Checking authentication...");
-      
-      // Small delay for smooth UX (prevents flash)
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      setLoadingMessage("Loading application...");
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setIsAppReady(true);
+      try {
+        setLoadingMessage("Checking authentication...");
+
+        // Small delay for smooth UX (prevents flash)
+        await new Promise(resolve => setTimeout(resolve, 400));
+
+        setLoadingMessage("Loading application...");
+        await new Promise(resolve => setTimeout(resolve, 300));
+      } catch (error) {
+        console.error("App initialization failed:", error);
+      } finally {
+        if (isMounted) {
+          setIsAppReady(true);
+        }
+      }
     };
 
     initApp();
+
+    return () => {
+      isMounted = false;
+      clearTimeout(failSafeTimer);
+    };
   }, []);
 
   return (
